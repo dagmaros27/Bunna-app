@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import '/components/auth/auth.dart';
-import '/components/home.dart';
+import '../home/home.dart';
 import '../../models/user.dart';
 import "page1.dart";
 

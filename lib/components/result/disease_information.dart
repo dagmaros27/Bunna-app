@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/disease_info.dart';
+import '../../models/disease_info.dart';
 
 class DiseaseInformation extends StatelessWidget {
   const DiseaseInformation({super.key});

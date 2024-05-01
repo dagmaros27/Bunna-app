@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import '/components/auth/auth.dart';
-import '/components/home.dart';
+import '../home/home.dart';
 import '/components/signup/page1.dart';
 
 class SignIn extends StatelessWidget {

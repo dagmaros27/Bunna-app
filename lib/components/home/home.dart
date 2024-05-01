@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import '/components/image_processing.dart';
-import '../themes.dart';
+import '../imageProcessing/image_processing.dart';
+import '../../themes.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

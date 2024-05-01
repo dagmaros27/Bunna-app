@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'results.dart';
+import '../result/results.dart';
 
 class ProcessingCard extends StatelessWidget {
   const ProcessingCard({Key? key});

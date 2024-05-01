@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../themes.dart';
+import '../../themes.dart';
 import 'processing_card.dart';
 
 class ImageProcessing extends StatefulWidget {
@@ -40,7 +40,7 @@ class _ImageProcessingState extends State<ImageProcessing> {
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
                 image: DecorationImage(
-                  image: AssetImage('assets/coffee.jpg'),
+                  image: AssetImage('assets/images/coffee_image.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../models/report.dart";
+import "../../models/report.dart";
 
 class AnalysisSummary extends StatelessWidget {
   const AnalysisSummary({super.key});
