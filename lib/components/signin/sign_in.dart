@@ -14,9 +14,12 @@ class SignIn extends StatelessWidget {
     final passwordController = TextEditingController();
     final auth = AuthService();
 
-    goToHome() {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const Home()));
+    goToHome(BuildContext context) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+        (route) => false,
+      );
     }
 
     login() async {
@@ -39,7 +42,7 @@ class SignIn extends StatelessWidget {
 
         if (user != null) {
           log("logged in successfully");
-          goToHome();
+          goToHome(context);
         } else {
           const snackBar = SnackBar(content: Text('Logging failed'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

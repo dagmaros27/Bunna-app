@@ -90,7 +90,7 @@ class AppTheme {
           style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all(const Color(0xFF4c6a4b)),
         backgroundColor: MaterialStateProperty.all(
-          Color(0XFFcfe2ce),
+          const Color(0XFFcfe2ce),
         ),
       )),
       textTheme: lightTextTheme,

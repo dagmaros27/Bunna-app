@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../themes.dart';
 import 'processing_card.dart';
 
 class ImageProcessing extends StatefulWidget {
-  const ImageProcessing({super.key});
+  final File imageFile;
+
+  const ImageProcessing({super.key, required this.imageFile});
 
   @override
   _ImageProcessingState createState() => _ImageProcessingState();
@@ -37,13 +41,7 @@ class _ImageProcessingState extends State<ImageProcessing> {
             child: Container(
               width: 360,
               height: 400,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/coffee_image.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: Image.file(widget.imageFile),
             ),
           ),
           if (!_showProcessingCard)

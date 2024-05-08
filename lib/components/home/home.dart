@@ -1,22 +1,68 @@
+import 'dart:io';
 import 'package:bunnaapp/components/information/informations.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../report/report.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
 import '../../themes.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  File? pickedImage;
+
+  Future<void> _pickImageFromGallery() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedImage == null) {
+      return;
+    }
+    setState(() {
+      pickedImage = File(returnedImage.path);
+    });
+
+    _gotoProcessing();
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (returnedImage == null) {
+      return;
+    }
+    setState(() {
+      pickedImage = File(returnedImage.path);
+    });
+
+    _gotoProcessing();
+  }
+
+  _gotoProcessing() {
+    if (pickedImage != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => ImageProcessing(imageFile: pickedImage!)),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-            child: Text(
-          "CODICAP",
-          style: Theme.of(context).textTheme.titleLarge,
-        )),
+          child: Text(
+            "CODICAP",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
       ),
       body: Center(
         child: Padding(
@@ -31,10 +77,7 @@ class Home extends StatelessWidget {
                   height: 48,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const ImageProcessing()),
-                      );
+                      _pickImageFromCamera();
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -56,10 +99,7 @@ class Home extends StatelessWidget {
                   height: 48,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const ImageProcessing()),
-                      );
+                      _pickImageFromGallery();
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
