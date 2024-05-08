@@ -1,3 +1,6 @@
+import 'package:bunnaapp/components/information/informations.dart';
+
+import '../report/report.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
 import '../../themes.dart';
@@ -52,7 +55,12 @@ class Home extends StatelessWidget {
                   width: 200,
                   height: 48,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const ImageProcessing()),
+                      );
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -72,7 +80,12 @@ class Home extends StatelessWidget {
                   width: 200,
                   height: 48,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const Informations()),
+                      );
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -92,7 +105,11 @@ class Home extends StatelessWidget {
                   width: 200,
                   height: 48,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => const Report()),
+                      );
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

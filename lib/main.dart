@@ -1,3 +1,4 @@
+import "package:bunnaapp/components/home/home.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:bunnaapp/components/signin/sign_in.dart";
@@ -11,6 +12,10 @@ Future<void> main() async {
 
   runApp(const Bunna());
 }
+
+// void main() {
+//   runApp(const Bunna());
+// }
 
 class Bunna extends StatelessWidget {
   const Bunna({super.key});
