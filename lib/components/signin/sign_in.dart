@@ -23,7 +23,7 @@ class SignIn extends StatelessWidget {
     }
 
     login() async {
-      String email = emailController.text;
+      String email = emailController.text.trim();
       String password = passwordController.text;
 
       bool validEmail = RegExp(

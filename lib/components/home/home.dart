@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:bunnaapp/components/auth/auth.dart';
 import 'package:bunnaapp/components/information/informations.dart';
+import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import '../report/report.dart';
 import "package:flutter/material.dart";
@@ -15,7 +17,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   File? pickedImage;
+  final auth = AuthService();
 
+  //function to
   Future<void> _pickImageFromGallery() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -62,6 +66,45 @@ class _HomeState extends State<Home> {
             "CODICAP",
             style: Theme.of(context).textTheme.titleLarge,
           ),
+        ),
+      ),
+      drawer: Drawer(
+        backgroundColor: const Color(0xE4E9FFE9),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(131, 40, 124, 61),
+              ),
+              child: Text(
+                'Coffee Disease Classifier Application (CODICAP)',
+              ),
+            ),
+            ListTile(
+              title: const Text('History'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Account'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('About Us'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Log Out'),
+              onTap: () {
+                auth.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignIn()),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
         ),
       ),
       body: Center(
