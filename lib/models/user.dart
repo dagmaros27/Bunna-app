@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 class User {
@@ -21,8 +22,7 @@ class User {
       this.occupationType});
 
   _userInfo() {
-    print(
-        " $firstName $lastName $email $password $phoneNumber $region $zone $occupationType");
+    log(" $firstName $lastName $email $password $phoneNumber $region $zone $occupationType");
   }
 
   isValid() {
@@ -48,5 +48,22 @@ class User {
     }
 
     return true;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'password': password,
+      'phoneNumber': phoneNumber,
+      'region': region,
+      'zone': zone,
+      'occupationType': occupationType,
+    };
+  }
+
+  String toJsonString() {
+    return jsonEncode(toJson());
   }
 }

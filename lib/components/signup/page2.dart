@@ -74,13 +74,132 @@ class _Page2State extends State<Page2> {
           child: SizedBox(
             width: 350,
             height: 600,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.arrow_back, size: 24),
+                            Text("Back"),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: "Phone Number",
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CountryFlag.fromCountryCode(
+                            'et',
+                            height: 30,
+                            width: 30,
+                            borderRadius: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: DropdownMenu<String>(
+                          hintText: "Region",
+                          onSelected: (String? newValue) {
+                            setState(() {
+                              regionValue = newValue;
+                            });
+                          },
+                          dropdownMenuEntries: <String>[
+                            'Gurage',
+                            'Guji',
+                            'Gonder',
+                            'Gojam',
+                            'Arsi'
+                          ].map<DropdownMenuEntry<String>>((String value) {
+                            return DropdownMenuEntry<String>(
+                              value: value,
+                              label: (value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 16),
+                        child: DropdownMenu<String>(
+                          hintText: "Zone",
+                          onSelected: (String? newValue) {
+                            setState(() {
+                              zoneValue = newValue;
+                            });
+                          },
+                          dropdownMenuEntries: <String>[
+                            'Gurage',
+                            'Guji',
+                            'Gonder',
+                            'Gojam',
+                            'Arsi'
+                          ].map<DropdownMenuEntry<String>>((String value) {
+                            return DropdownMenuEntry<String>(
+                              value: value,
+                              label: (value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: DropdownMenu<String>(
+                      hintText: "Occupation",
+                      onSelected: (String? newValue) {
+                        setState(() {
+                          occupationValue = newValue;
+                        });
+                      },
+                      dropdownMenuEntries: <String>['Farmer', 'Researcher']
+                          .map<DropdownMenuEntry<String>>((String value) {
+                        return DropdownMenuEntry<String>(
+                          value: value,
+                          label: (value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextButton(
                       style: ButtonStyle(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -90,136 +209,20 @@ class _Page2State extends State<Page2> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.arrow_back, size: 24),
-                          Text("Back"),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "Phone Number",
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CountryFlag.fromCountryCode(
-                          'et',
-                          height: 30,
-                          width: 30,
-                          borderRadius: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: DropdownMenu<String>(
-                        hintText: "Region",
-                        onSelected: (String? newValue) {
-                          setState(() {
-                            regionValue = newValue;
-                          });
-                        },
-                        dropdownMenuEntries: <String>[
-                          'Gurage',
-                          'Guji',
-                          'Gonder',
-                          'Gojam',
-                          'Arsi'
-                        ].map<DropdownMenuEntry<String>>((String value) {
-                          return DropdownMenuEntry<String>(
-                            value: value,
-                            label: (value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
-                      child: DropdownMenu<String>(
-                        hintText: "Zone",
-                        onSelected: (String? newValue) {
-                          setState(() {
-                            zoneValue = newValue;
-                          });
-                        },
-                        dropdownMenuEntries: <String>[
-                          'Gurage',
-                          'Guji',
-                          'Gonder',
-                          'Gojam',
-                          'Arsi'
-                        ].map<DropdownMenuEntry<String>>((String value) {
-                          return DropdownMenuEntry<String>(
-                            value: value,
-                            label: (value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: DropdownMenu<String>(
-                    hintText: "Occupation",
-                    onSelected: (String? newValue) {
-                      setState(() {
-                        occupationValue = newValue;
-                      });
-                    },
-                    dropdownMenuEntries: <String>['Farmer', 'Researcher']
-                        .map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(
-                        value: value,
-                        label: (value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      widget.user.phoneNumber = phoneController.text;
-                      widget.user.region = regionValue;
-                      widget.user.zone = zoneValue;
-                      widget.user.occupationType = occupationValue;
+                        widget.user.phoneNumber = phoneController.text;
+                        widget.user.region = regionValue;
+                        widget.user.zone = zoneValue;
+                        widget.user.occupationType = occupationValue;
 
-                      signup(widget.user);
-                    },
-                    child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(child: Text("Register"))),
+                        signup(widget.user);
+                      },
+                      child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(child: Text("Register"))),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

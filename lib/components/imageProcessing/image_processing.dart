@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../themes.dart';
 import 'processing_card.dart';
+import '../../services/image_process_service.dart';
 
 class ImageProcessing extends StatefulWidget {
   final File imageFile;
@@ -15,6 +19,10 @@ class ImageProcessing extends StatefulWidget {
 
 class _ImageProcessingState extends State<ImageProcessing> {
   bool _showProcessingCard = false;
+
+  _sendData() async {
+    processImage(widget.imageFile);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +61,8 @@ class _ImageProcessingState extends State<ImageProcessing> {
                     setState(() {
                       _showProcessingCard = true;
                     });
+                    _sendData();
+                    log("pressed");
                   },
                   child: const Text("Process Image"),
                 ),

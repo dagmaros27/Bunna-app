@@ -1,3 +1,4 @@
+import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:bunnaapp/models/user.dart';
@@ -39,117 +40,133 @@ class _Page1State extends State<Page1> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 70),
-        child: Center(
-          child: SizedBox(
-            width: 350,
-            height: 600,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                    child: Text("Sign Up",
-                        style: Theme.of(context).textTheme.displayLarge)),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    controller: _firstNameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "First Name",
-                        hintText: "John"),
+        child: SingleChildScrollView(
+          child: Center(
+            child: SizedBox(
+              width: 350,
+              height: 600,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                      child: Text("Sign Up",
+                          style: Theme.of(context).textTheme.displayLarge)),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextField(
+                      controller: _firstNameController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "First Name",
+                          hintText: "John"),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    controller: _lastNameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Last Name",
-                        hintText: "Doe"),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextField(
+                      controller: _lastNameController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Last Name",
+                          hintText: "Doe"),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Email",
-                        hintText: "John@example.com"),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Email",
+                          hintText: "John@example.com"),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Password"),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: "Password"),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextButton(
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (_emailController.text == "" ||
+                            _firstNameController.text == "" ||
+                            _lastNameController.text == "" ||
+                            _passwordController.text == "") {
+                          const snackBar =
+                              SnackBar(content: Text('Fill all the fields'));
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          return;
+                        }
+                        User newUser = User(
+                          email: _emailController.text,
+                          firstName: _firstNameController.text,
+                          lastName: _lastNameController.text,
+                          password: _passwordController.text,
+                        );
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SignUp2(user: newUser)));
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Next"),
+                            Icon(Icons.arrow_forward, size: 24),
+                          ],
                         ),
                       ),
                     ),
-                    onPressed: () {
-                      User newUser = User(
-                        email: _emailController.text,
-                        firstName: _firstNameController.text,
-                        lastName: _lastNameController.text,
-                        password: _passwordController.text,
-                      );
-
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignUp2(user: newUser)));
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Next"),
-                          Icon(Icons.arrow_forward, size: 24),
-                        ],
-                      ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Divider(
+                      color: Color(0xFFD3D1D1),
+                      thickness: 0.7,
                     ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Divider(
-                    color: Color(0xFFD3D1D1),
-                    thickness: 0.7,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already have an account? "),
+                      GestureDetector(
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(color: Color(0xFF00B115)),
+                        ),
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignIn()),
+                            (route) => false,
+                          );
+                        },
+                      )
+                    ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an accout yet? "),
-                    GestureDetector(
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(color: Color(0xFF00B115)),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const SignUp()));
-                      },
-                    )
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

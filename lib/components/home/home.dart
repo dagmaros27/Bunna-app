@@ -1,12 +1,17 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:bunnaapp/components/about/about.dart';
+import 'package:bunnaapp/components/account/account.dart';
 import 'package:bunnaapp/components/auth/auth.dart';
 import 'package:bunnaapp/components/information/informations.dart';
+import 'package:bunnaapp/components/history/history.dart';
 import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import '../report/report.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
 import '../../themes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +24,6 @@ class _HomeState extends State<Home> {
   File? pickedImage;
   final auth = AuthService();
 
-  //function to
   Future<void> _pickImageFromGallery() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -83,15 +87,27 @@ class _HomeState extends State<Home> {
             ),
             ListTile(
               title: const Text('History'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const History()),
+                );
+              },
             ),
             ListTile(
               title: const Text('Account'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Account()),
+                );
+              },
             ),
             ListTile(
               title: const Text('About Us'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const About()),
+                );
+              },
             ),
             ListTile(
               title: const Text('Log Out'),
@@ -199,6 +215,31 @@ class _HomeState extends State<Home> {
                         const Icon(Icons.report_problem, size: 24),
                         Text(
                           "Report Issues",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 200,
+                  height: 48,
+                  child: TextButton(
+                    onPressed: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+
+                      log('${prefs.getString('auth-token')}');
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.report_problem, size: 24),
+                        Text(
+                          "print",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],

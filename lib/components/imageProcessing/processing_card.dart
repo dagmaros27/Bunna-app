@@ -3,7 +3,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import '../result/results.dart';
 
 class ProcessingCard extends StatelessWidget {
-  const ProcessingCard({Key? key});
+  const ProcessingCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +16,18 @@ class ProcessingCard extends StatelessWidget {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(top: 16, left: 56, bottom: 16, right: 16),
-          child: LinearPercentIndicator(
-            width: 380,
-            animation: true,
-            lineHeight: 20.0,
-            animationDuration: 2000,
-            percent: 0.9,
-            center: const Text("Processing image(90.0%)"),
-            barRadius: const Radius.circular(12),
-            progressColor: Colors.green.shade800,
+              const EdgeInsets.only(top: 16, left: 16, bottom: 16, right: 16),
+          child: SizedBox(
+            width: 360, // Adjust this width as needed
+            child: LinearPercentIndicator(
+              animation: true,
+              lineHeight: 20.0,
+              animationDuration: 2000,
+              percent: 0.9,
+              center: const Text("Processing image(90.0%)"),
+              barRadius: const Radius.circular(12),
+              progressColor: Colors.green.shade800,
+            ),
           ),
         ),
         Padding(
