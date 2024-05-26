@@ -1,21 +1,31 @@
-import "package:bunnaapp/components/home/home.dart";
-import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
-import "package:bunnaapp/components/signin/sign_in.dart";
-import "package:bunnaapp/firebase_options.dart";
+import 'package:bunnaapp/components/home/home.dart';
+import 'package:bunnaapp/providers/history_provider.dart';
+import 'package:bunnaapp/providers/result_provider.dart';
+import 'package:bunnaapp/providers/user_providers.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'firebase_options.dart';
 import 'themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  runApp(const Bunna());
+  // Run the app
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => UserProvider()),
+      ChangeNotifierProvider(create: (context) => ResultProvider()),
+      ChangeNotifierProvider(create: (context) => HistoryProvider()),
+    ],
+    child: const Bunna(),
+  ));
 }
-
-// void main() {
-//   runApp(const Bunna());
-// }
 
 class Bunna extends StatelessWidget {
   const Bunna({super.key});
@@ -24,10 +34,10 @@ class Bunna extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.light();
     return MaterialApp(
-      //coffee disease classifier application
+      // Coffee disease classifier application
       debugShowCheckedModeBanner: false,
       title: "CODICAP",
-      home: const SignIn(),
+      home: const Home(),
       theme: theme,
     );
   }

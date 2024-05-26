@@ -26,7 +26,7 @@ class User {
   }
 
   isValid() {
-    _userInfo();
+    // _userInfo();
     if (firstName == null ||
         lastName == null ||
         email == null ||

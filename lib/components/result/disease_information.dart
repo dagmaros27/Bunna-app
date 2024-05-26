@@ -30,8 +30,7 @@ class DiseaseInformation extends StatelessWidget {
               color: Color(0xFFD3D1D1),
               thickness: 0.7,
             ),
-            ...DiseaseInfo.dummyInfo.recommendations
-                .map((recommendation) => Text(recommendation)),
+            Text(DiseaseInfo.dummyInfo.recommendations),
             const SizedBox(height: 16),
             Text("Additional Information",
                 style: Theme.of(context).textTheme.displaySmall),
@@ -39,7 +38,7 @@ class DiseaseInformation extends StatelessWidget {
               color: Color(0xFFD3D1D1),
               thickness: 0.7,
             ),
-            ...DiseaseInfo.dummyInfo.additional.map((info) => Text(info)),
+            Text(DiseaseInfo.dummyInfo.additional),
           ],
         ),
       ),
