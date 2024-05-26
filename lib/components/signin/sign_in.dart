@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:bunnaapp/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '/components/auth/auth.dart';
 import '../home/home.dart';
 import '/components/signup/page1.dart';
@@ -42,6 +44,9 @@ class SignIn extends StatelessWidget {
 
         if (user != null) {
           log("logged in successfully");
+          log("$user");
+          context.read<UserProvider>().setUser(
+              username: user.email!, authToken: user.uid, role: "user");
           goToHome(context);
         } else {
           const snackBar = SnackBar(content: Text('Logging failed'));

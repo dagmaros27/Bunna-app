@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bunnaapp/components/account/account.dart';
 import 'package:bunnaapp/components/auth/auth.dart';
 import 'package:bunnaapp/components/information/informations.dart';
 import 'package:bunnaapp/components/signin/sign_in.dart';
@@ -87,7 +88,11 @@ class _HomeState extends State<Home> {
             ),
             ListTile(
               title: const Text('Account'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Account()),
+                );
+              },
             ),
             ListTile(
               title: const Text('About Us'),
