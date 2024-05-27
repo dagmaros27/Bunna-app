@@ -46,7 +46,8 @@ class SignIn extends StatelessWidget {
         // final user = await auth.logInUserWithEmailAndPassword(
         //     email: email, password: password);
 
-        final loggedIn = await login(email: email, password: password);
+        final loggedIn =
+            await login(email: email, password: password, context: context);
 
         if (loggedIn == true) {
           goToHome(context);

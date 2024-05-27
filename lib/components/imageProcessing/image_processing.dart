@@ -21,7 +21,7 @@ class _ImageProcessingState extends State<ImageProcessing> {
   bool _showProcessingCard = false;
 
   _sendData() async {
-    processImage(widget.imageFile);
+    processImage(widget.imageFile, context);
   }
 
   @override

@@ -1,4 +1,6 @@
+import 'package:bunnaapp/providers/result_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/report.dart';
 
 class AnalysisSummary extends StatelessWidget {
@@ -6,6 +8,7 @@ class AnalysisSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final report = context.read<ResultProvider>().result?.report;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: SingleChildScrollView(
@@ -38,9 +41,7 @@ class AnalysisSummary extends StatelessWidget {
                         Text("Status: ",
                             style: Theme.of(context).textTheme.displaySmall),
                         const SizedBox(width: 10),
-                        Text(
-                          Report.dummyReport.status,
-                        ),
+                        Text(report?.status ?? ""),
                       ],
                     ),
                     Row(
@@ -50,7 +51,7 @@ class AnalysisSummary extends StatelessWidget {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            Report.dummyReport.timeStamp,
+                            report?.timeStamp ?? "",
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -61,7 +62,7 @@ class AnalysisSummary extends StatelessWidget {
                         Text("Location: ",
                             style: Theme.of(context).textTheme.displaySmall),
                         const SizedBox(width: 10),
-                        Text(Report.dummyReport.location),
+                        Text(report?.location ?? ""),
                       ],
                     ),
                     Row(
@@ -69,7 +70,7 @@ class AnalysisSummary extends StatelessWidget {
                         Text("Disease Identified: ",
                             style: Theme.of(context).textTheme.displaySmall),
                         const SizedBox(width: 10),
-                        Text(Report.dummyReport.diseases),
+                        Text(report?.diseases ?? ""),
                       ],
                     ),
                     Row(
@@ -77,7 +78,7 @@ class AnalysisSummary extends StatelessWidget {
                         Text("Severity: ",
                             style: Theme.of(context).textTheme.displaySmall),
                         const SizedBox(width: 10),
-                        Text(Report.dummyReport.severity),
+                        Text(report?.severity ?? ""),
                       ],
                     ),
                     Row(
@@ -85,7 +86,7 @@ class AnalysisSummary extends StatelessWidget {
                         Text("Confidence Level: ",
                             style: Theme.of(context).textTheme.displaySmall),
                         const SizedBox(width: 10),
-                        Text("${Report.dummyReport.confidenceLevel}%"),
+                        Text("${report?.confidenceLevel ?? 0.0}%"),
                       ],
                     ),
                   ],

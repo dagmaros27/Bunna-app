@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:bunnaapp/providers/user_providers.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../models/user.dart';
 import "package:shared_preferences/shared_preferences.dart";
 
-const String backendUrl = 'https://ffa0-196-190-60-218.ngrok-free.app/';
+const String backendUrl = 'https://31d8-196-189-55-109.ngrok-free.app/';
 
-Future<void> saveAuthToken(String token) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('auth-token', token);
-}
+Future<void> saveUser(dynamic user) async {}
 
 Future<bool> register(User user) async {
   final url = Uri.parse('$backendUrl/register');
@@ -28,7 +28,10 @@ Future<bool> register(User user) async {
   }
 }
 
-login({required String email, required String password}) async {
+Future<bool> login(
+    {required String email,
+    required String password,
+    required BuildContext context}) async {
   final url = Uri.parse('$backendUrl/login');
   final response = await http.post(
     url,
@@ -38,14 +41,21 @@ login({required String email, required String password}) async {
 
   if (response.statusCode == 200) {
     final responseBody = json.decode(response.body);
-    final authToken = responseBody['access_token'];
 
-    if (authToken != null) {
-      await saveAuthToken(authToken);
-      log('Auth token saved: $authToken');
+    if (responseBody != null) {
+      final userName = responseBody['firstName'];
+      final authToken = responseBody['access_token'];
+      final role = responseBody['occupation'];
+
+      // Set the user in the provider
+      Provider.of<UserProvider>(context, listen: false).setUser(
+        username: userName,
+        role: role,
+        authToken: authToken,
+      );
       return true;
     } else {
-      log('Auth token not found in the response');
+      log('Auth token or user info not found in the response');
       return false;
     }
   } else {

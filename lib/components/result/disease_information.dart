@@ -1,4 +1,6 @@
+import 'package:bunnaapp/providers/result_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/disease_info.dart';
 
 class DiseaseInformation extends StatelessWidget {
@@ -6,6 +8,7 @@ class DiseaseInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final diseaseInfo = context.read<ResultProvider>().result?.diseaseInfo;
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Container(
@@ -22,7 +25,7 @@ class DiseaseInformation extends StatelessWidget {
               color: Color(0xFFD3D1D1),
               thickness: 0.7,
             ),
-            Text(DiseaseInfo.dummyInfo.diagnosis),
+            Text(diseaseInfo?.diagnosis ?? ""),
             const SizedBox(height: 16),
             Text("Recommended Actions",
                 style: Theme.of(context).textTheme.displaySmall),
@@ -30,7 +33,7 @@ class DiseaseInformation extends StatelessWidget {
               color: Color(0xFFD3D1D1),
               thickness: 0.7,
             ),
-            Text(DiseaseInfo.dummyInfo.recommendations),
+            Text(diseaseInfo?.recommendations ?? ""),
             const SizedBox(height: 16),
             Text("Additional Information",
                 style: Theme.of(context).textTheme.displaySmall),
@@ -38,7 +41,7 @@ class DiseaseInformation extends StatelessWidget {
               color: Color(0xFFD3D1D1),
               thickness: 0.7,
             ),
-            Text(DiseaseInfo.dummyInfo.additional),
+            Text(diseaseInfo?.additional ?? ""),
           ],
         ),
       ),

@@ -1,18 +1,23 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:bunnaapp/models/models.dart';
+import 'package:bunnaapp/providers/result_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import "../models/disease_info.dart";
-import "../models/report.dart";
+import 'package:provider/provider.dart';
+import '../models/disease_info.dart';
+import '../models/report.dart';
+import '../providers/user_providers.dart';
 
-const String backendUrl = 'https://ffa0-196-190-60-218.ngrok-free.app/';
+const String backendUrl = 'https://31d8-196-189-55-109.ngrok-free.app/';
 
-Future<Map<String, dynamic>?> processImage(File imageFile) async {
+Future<Map<String, dynamic>?> processImage(
+    File imageFile, BuildContext context) async {
   final url = Uri.parse('$backendUrl/coffee-disease-detection');
-  final prefs = await SharedPreferences.getInstance();
 
-  final String? authToken = prefs.getString('auth-token');
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  final String? authToken = userProvider.authToken;
 
   if (authToken == null) {
     log('Auth token not found');
@@ -33,12 +38,8 @@ Future<Map<String, dynamic>?> processImage(File imageFile) async {
       var report = Report.fromJson(jsonResponse);
       var diseaseInfo = DiseaseInfo.fromJson(jsonResponse);
 
-      log("Report: $report");
-      log("Disease Info: $diseaseInfo");
-      return {
-        'report': report,
-        'diseaseInfo': diseaseInfo,
-      };
+      Provider.of<ResultProvider>(context, listen: false)
+          .setResult(Result(diseaseInfo: diseaseInfo, report: report));
     } else {
       var responseBody = await response.stream.bytesToString();
       log('Failed to process image: $responseBody');
