@@ -4,6 +4,7 @@ import "package:bunnaapp/components/history/history.dart";
 import "package:bunnaapp/components/researcher/analytics.dart";
 import "package:bunnaapp/components/researcher/bar_graph.dart";
 import "package:bunnaapp/components/signin/sign_in.dart";
+import "package:countup/countup.dart";
 
 import "piechart.dart";
 import "package:flutter/material.dart";
@@ -79,16 +80,16 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       body: ListView(
-        children: const [
+        children: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Card(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Text(
                           "Total samples analyzed ",
@@ -99,12 +100,16 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "300+",
-                            style: TextStyle(
-                              fontSize: 48,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Countup(
+                            begin: 0,
+                            end: 300,
+                            suffix: "+ images",
+                            duration: const Duration(seconds: 3),
+                            separator: ',',
+                            style: const TextStyle(
                               color: Colors.green,
+                              fontSize: 36,
                             ),
                           ),
                         ),
@@ -116,7 +121,7 @@ class _DashboardState extends State<Dashboard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Text(
                           "Accuracy rate ",
@@ -127,20 +132,23 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            "85.6%",
-                            style: TextStyle(
-                              fontSize: 48,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Countup(
+                              begin: 0,
+                              end: 83.47,
+                              duration: const Duration(seconds: 3),
+                              separator: ',',
+                              suffix: "%",
+                              style: const TextStyle(
+                                color: Colors.green,
+                                fontSize: 36,
+                              ),
+                            )),
                       )
                     ],
                   ),
                 ),
-                Card(
+                const Card(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
