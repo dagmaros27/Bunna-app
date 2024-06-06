@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:bunnaapp/providers/user_providers.dart';
+import 'package:provider/provider.dart';
+import 'package:bunnaapp/components/researcher/dashboard.dart';
 import 'package:flutter/material.dart';
 import '/components/auth/auth.dart';
 import '../home/home.dart';
@@ -18,12 +20,26 @@ class SignIn extends StatelessWidget {
 
     final auth = AuthService();
 
-    goToHome(BuildContext context) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-        (route) => false,
-      );
+    goToHome(BuildContext context, String role) {
+      if (role == "Farmer") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+          (route) => false,
+        );
+      } else if (role == "Researcher") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const Dashboard()),
+          (route) => false,
+        );
+      } else {
+        const snackBar = SnackBar(
+          content: Text('Unknown user type'),
+          backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
 
     _login(BuildContext context) async {
@@ -50,7 +66,7 @@ class SignIn extends StatelessWidget {
             await login(email: email, password: password, context: context);
 
         if (loggedIn == true) {
-          goToHome(context);
+          goToHome(context, context.read<UserProvider>().role ?? "");
         } else {
           const snackBar = SnackBar(content: Text('Logging failed'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
