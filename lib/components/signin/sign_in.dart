@@ -10,70 +10,20 @@ import '/components/signup/page1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/user_service.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   const SignIn({super.key});
 
   @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool _isObscure = true;
+
+  @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
-    final auth = AuthService();
-
-    goToHome(BuildContext context, String role) {
-      if (role == "Farmer") {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-          (route) => false,
-        );
-      } else if (role == "Researcher") {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Dashboard()),
-          (route) => false,
-        );
-      } else {
-        const snackBar = SnackBar(
-          content: Text('Unknown user type'),
-          backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    }
-
-    _login(BuildContext context) async {
-      String email = emailController.text.trim();
-      String password = passwordController.text;
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      bool validEmail = RegExp(
-              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-          .hasMatch(email);
-
-      if (email == "" || password == "" || !validEmail) {
-        log("invalid email or password");
-        const snackBar = SnackBar(
-          content: Text('Invalid email or password'),
-          backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        // final user = await auth.logInUserWithEmailAndPassword(
-        //     email: email, password: password);
-
-        final loggedIn =
-            await login(email: email, password: password, context: context);
-
-        if (loggedIn == true) {
-          goToHome(context, context.read<UserProvider>().role ?? "");
-        } else {
-          const snackBar = SnackBar(content: Text('Logging failed'));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -112,11 +62,21 @@ class SignIn extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: TextField(
-                    obscureText: true,
+                    obscureText: _isObscure,
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
                       labelText: "Password",
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -172,6 +132,43 @@ class SignIn extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _login(BuildContext context) async {
+    String email = emailController.text.trim();
+    String password = passwordController.text;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    bool validEmail = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+
+    if (email == "" || password == "" || !validEmail) {
+      log("invalid email or password");
+      const snackBar = SnackBar(
+        content: Text('Invalid email or password'),
+        backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      final loggedIn =
+          await login(email: email, password: password, context: context);
+
+      if (loggedIn == true) {
+        goToHome(context, context.read<UserProvider>().role ?? "");
+      } else {
+        const snackBar = SnackBar(content: Text('Logging failed'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
+  }
+
+  void goToHome(BuildContext context, String role) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const Home()),
+      (route) => false,
     );
   }
 }

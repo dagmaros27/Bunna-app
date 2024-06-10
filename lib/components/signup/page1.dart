@@ -117,10 +117,10 @@ class _Page1State extends State<Page1> {
                           return;
                         }
                         User newUser = User(
-                          email: _emailController.text,
-                          firstName: _firstNameController.text,
-                          lastName: _lastNameController.text,
-                          password: _passwordController.text,
+                          email: _emailController.text.trim(),
+                          firstName: _firstNameController.text.trim(),
+                          lastName: _lastNameController.text.trim(),
+                          password: _passwordController.text.trim(),
                         );
 
                         Navigator.of(context).push(MaterialPageRoute(

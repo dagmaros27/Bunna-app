@@ -31,7 +31,9 @@ class Report {
       diseases: json['disease_name'] ?? '',
       location: json['region'] ?? '',
       severity: json['severity'] ?? '',
-      confidenceLevel: json['confidence']?.toDouble() ?? 0.0,
+      confidenceLevel: double.tryParse(json['confidence'] ?? '0.0') ??
+          json['confidence']?.toDouble() ??
+          0.0,
     );
   }
 }

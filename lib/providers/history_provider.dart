@@ -4,7 +4,7 @@ import '../models/models.dart';
 class HistoryProvider with ChangeNotifier {
   HistoryProvider() {
     // Initialize with dummy data
-    _initializeDummyData();
+    // _initializeDummyData();
   }
 
   List<Result> _history = [];

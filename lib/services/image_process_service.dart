@@ -6,12 +6,11 @@ import 'package:bunnaapp/providers/result_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import '../models/disease_info.dart';
-import '../models/report.dart';
+import '../models/models.dart';
 import '../providers/user_providers.dart';
+import '../utils/urls.dart';
 
-const String backendUrl = 'https://31d8-196-189-55-109.ngrok-free.app/';
-
+String backendUrl = GlobalUrl.rootUrl;
 Future<Map<String, dynamic>?> processImage(
     File imageFile, BuildContext context) async {
   final url = Uri.parse('$backendUrl/coffee-disease-detection');

@@ -1,8 +1,7 @@
 import 'dart:developer';
-
+import 'package:bunnaapp/services/user_service.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
-import '/components/auth/auth.dart';
 import '../home/home.dart';
 import '../../models/user.dart';
 import "page1.dart";
@@ -43,7 +42,6 @@ class _Page2State extends State<Page2> {
   String? occupationValue;
 
   final TextEditingController phoneController = TextEditingController();
-  final _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +52,8 @@ class _Page2State extends State<Page2> {
 
     signup(user) async {
       if (user.isValid()) {
-        final newUser = await _auth.createUserWithEmailAndPassword(
-            email: user.email, password: user.password);
-
-        if (newUser != null) {
+        final registered = await register(user);
+        if (registered == false) {
           log("User created successfully");
           _goToHome();
         }
@@ -209,7 +205,8 @@ class _Page2State extends State<Page2> {
                         ),
                       ),
                       onPressed: () {
-                        widget.user.phoneNumber = phoneController.text;
+                        widget.user.phoneNumber =
+                            "+251${phoneController.text.substring(1)}";
                         widget.user.region = regionValue;
                         widget.user.zone = zoneValue;
                         widget.user.occupationType = occupationValue;

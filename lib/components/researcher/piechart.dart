@@ -3,13 +3,20 @@ import 'indicator.dart';
 import 'package:flutter/material.dart';
 
 class PieChartSample2 extends StatefulWidget {
-  const PieChartSample2({super.key});
+  final List<String> diseaseNames;
+  final List<double> percentages;
+
+  const PieChartSample2({
+    super.key,
+    required this.diseaseNames,
+    required this.percentages,
+  });
 
   @override
   State<StatefulWidget> createState() => PieChart2State();
 }
 
-class PieChart2State extends State {
+class PieChart2State extends State<PieChartSample2> {
   int touchedIndex = -1;
 
   @override
@@ -50,43 +57,23 @@ class PieChart2State extends State {
               ),
             ),
           ),
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Indicator(
-                color: Colors.blue,
-                text: 'Disease A',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.yellow,
-                text: 'Disease B',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.green,
-                text: 'Disease c',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Colors.red,
-                text: 'Disease D',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 18,
-              ),
-            ],
+            children: List.generate(widget.diseaseNames.length, (index) {
+              return Column(
+                children: [
+                  Indicator(
+                    color: getColor(index),
+                    text: widget.diseaseNames[index],
+                    isSquare: true,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                ],
+              );
+            }),
           ),
           const SizedBox(
             width: 25,
@@ -97,67 +84,38 @@ class PieChart2State extends State {
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+    return List.generate(widget.diseaseNames.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
       const shadows = [Shadow(color: Colors.white, blurRadius: 3)];
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: Colors.blue,
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 36, 36, 36),
-              shadows: shadows,
-            ),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: Colors.yellow,
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 36, 36, 36),
-              shadows: shadows,
-            ),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: Colors.green,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 36, 36, 36),
-              shadows: shadows,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: Colors.red,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 36, 36, 36),
-              shadows: shadows,
-            ),
-          );
-        default:
-          throw Error();
-      }
+      return PieChartSectionData(
+        color: getColor(i),
+        value: widget.percentages[i],
+        title: '${widget.percentages[i]}%',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: const Color.fromARGB(255, 36, 36, 36),
+          shadows: shadows,
+        ),
+      );
     });
+  }
+
+  Color getColor(int index) {
+    switch (index % 4) {
+      case 0:
+        return Colors.blue;
+      case 1:
+        return Colors.yellow;
+      case 2:
+        return Colors.green;
+      case 3:
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 }

@@ -11,22 +11,22 @@ class User {
   String? zone;
   String? occupationType;
 
-  User(
-      {this.firstName,
-      this.lastName,
-      this.email,
-      this.password,
-      this.phoneNumber,
-      this.region,
-      this.zone,
-      this.occupationType});
+  User({
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.password,
+    this.phoneNumber,
+    this.region,
+    this.zone,
+    this.occupationType,
+  });
 
   _userInfo() {
     log(" $firstName $lastName $email $password $phoneNumber $region $zone $occupationType");
   }
 
   isValid() {
-    // _userInfo();
     if (firstName == null ||
         lastName == null ||
         email == null ||
@@ -39,8 +39,8 @@ class User {
       return false;
     }
     bool validEmail = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email!);
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    ).hasMatch(email!);
 
     if (!validEmail) {
       log("email is not valid");
@@ -59,11 +59,24 @@ class User {
       'phoneNumber': phoneNumber,
       'region': region,
       'zone': zone,
-      'occupationType': occupationType,
+      'occupation': occupationType,
     };
   }
 
   String toJsonString() {
     return jsonEncode(toJson());
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      email: json['email'],
+      password: json['password'],
+      phoneNumber: json['phoneNumber'],
+      region: json['region'],
+      zone: json['zone'],
+      occupationType: json['occupation'],
+    );
   }
 }

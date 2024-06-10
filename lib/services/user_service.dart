@@ -1,17 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../models/user.dart';
 import "package:shared_preferences/shared_preferences.dart";
+import '../utils/urls.dart';
 
-const String backendUrl = 'https://31d8-196-189-55-109.ngrok-free.app/';
+String backendUrl = GlobalUrl.rootUrl;
 
 Future<void> saveUser(dynamic user) async {}
 
 Future<bool> register(User user) async {
+  log(user.toJsonString());
   final url = Uri.parse('$backendUrl/register');
   final response = await http.post(
     url,
@@ -19,6 +22,7 @@ Future<bool> register(User user) async {
     body: user.toJsonString(),
   );
 
+  log(response.statusCode.toString());
   if (response.statusCode == 201) {
     log("user registered successfully");
     return true;
@@ -46,12 +50,13 @@ Future<bool> login(
       final userName = responseBody['firstName'];
       final authToken = responseBody['access_token'];
       final role = responseBody['occupation'];
+      final userId = responseBody['user_id'];
 
-      // Set the user in the provider
       Provider.of<UserProvider>(context, listen: false).setUser(
         username: userName,
         role: role,
         authToken: authToken,
+        userId: userId,
       );
       return true;
     } else {
@@ -62,6 +67,18 @@ Future<bool> login(
     log('Failed to login: ${response.body}');
     return false;
   }
+}
+
+Future<bool> logout(BuildContext context) async {
+  context.read<UserProvider>().clearUser();
+
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const SignIn()),
+    (route) => false,
+  );
+
+  return true;
 }
 
 Future<bool> forgotPassword(String email) async {
@@ -81,29 +98,6 @@ Future<bool> forgotPassword(String email) async {
   }
 }
 
-Future<User?> getUser(String email) async {
-  final url = Uri.parse('$backendUrl/user?email=$email');
-  final response =
-      await http.get(url, headers: {'Content-Type': 'application/json'});
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> userData = jsonDecode(response.body);
-    return User(
-      firstName: userData['firstName'],
-      lastName: userData['lastName'],
-      email: userData['email'],
-      password: userData['password'],
-      phoneNumber: userData['phoneNumber'],
-      region: userData['region'],
-      zone: userData['zone'],
-      occupationType: userData['occupationType'],
-    );
-  } else {
-    log('Failed to get user: ${response.body}');
-    return null;
-  }
-}
-
 Future<bool> updateUser(User user) async {
   final url = Uri.parse('$backendUrl/user');
   final response = await http.put(
@@ -118,5 +112,34 @@ Future<bool> updateUser(User user) async {
   } else {
     log('Failed to update user: ${response.body}');
     return false;
+  }
+}
+
+Future<User?> getUser(BuildContext context) async {
+  final userProvider = context.read<UserProvider>();
+  final authToken = userProvider.authToken;
+  final userId = userProvider.userId;
+
+  if (userId == null) {
+    log('User ID is null');
+    return null;
+  }
+
+  final url = Uri.parse('$backendUrl/users/$userId');
+  final response = await http.get(
+    url,
+    headers: {
+      'Authorization': 'Bearer $authToken',
+      'Content-Type': 'application/json'
+    },
+  );
+
+  if (response.statusCode == 201) {
+    final responseBody = json.decode(response.body);
+    final user = User.fromJson(responseBody);
+    return user;
+  } else {
+    log('Failed to get user: ${response.body}');
+    return null;
   }
 }

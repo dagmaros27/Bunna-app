@@ -1,8 +1,19 @@
+import 'dart:convert';
+import 'dart:developer';
+
 class Analytics {
   int totalDiseaseReport;
   List<Disease> countByDisease;
   List<Region> countByRegion;
   Map<String, List<DiseasePrevalency>> prevalency;
+
+  // addCountByDisease(Disease disease) {
+  //   countByDisease.add(disease);
+  // }
+
+  // addCountByRegion(Region region) {
+  //   countByRegion.add(region);
+  // }
 
   Analytics(
       {required this.countByDisease,
@@ -37,6 +48,43 @@ class Analytics {
         (key, value) => MapEntry(key, value.map((i) => i.toJson()).toList()),
       ),
     };
+  }
+
+  String toJsonString() {
+    return jsonEncode(toJson());
+  }
+
+  getPiechartData() {
+    List<String> diseaseName = [];
+    List<double> reports = [];
+    for (var disease in countByDisease) {
+      diseaseName.add(disease.diseaseName);
+      reports
+          .add(((disease.reported / totalDiseaseReport) * 100).roundToDouble());
+    }
+
+    List<List<dynamic>> res = [];
+    res.add(diseaseName);
+    res.add(reports);
+    return res;
+  }
+
+  getBarData() {
+    Map<String, List<List<dynamic>>> res = {};
+
+    for (var key in prevalency.keys) {
+      var counted = [];
+      var region = [];
+      for (var val in prevalency[key]!) {
+        counted.add(
+          int.parse(val.count.toString()),
+        );
+        region.add(val.region);
+      }
+
+      res[key] = [counted, region];
+    }
+    return res;
   }
 }
 
@@ -90,7 +138,7 @@ class Region {
 
 class DiseasePrevalency {
   final String disease;
-  final int count;
+  final String count; // Change type to String
   final String region;
 
   DiseasePrevalency({
@@ -102,7 +150,7 @@ class DiseasePrevalency {
   factory DiseasePrevalency.fromJson(Map<String, dynamic> json) {
     return DiseasePrevalency(
       disease: json['disease'],
-      count: json['count'],
+      count: json['count'].toString(), // Convert int to string
       region: json['region'],
     );
   }

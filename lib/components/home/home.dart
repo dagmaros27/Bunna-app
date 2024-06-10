@@ -3,10 +3,16 @@ import 'dart:io';
 import 'package:bunnaapp/components/about/about.dart';
 import 'package:bunnaapp/components/account/account.dart';
 import 'package:bunnaapp/components/auth/auth.dart';
+import 'package:bunnaapp/components/drawer/user_drawer.dart';
 import 'package:bunnaapp/components/information/informations.dart';
 import 'package:bunnaapp/components/history/history.dart';
+import 'package:bunnaapp/components/researcher/dashboard.dart';
 import 'package:bunnaapp/components/signin/sign_in.dart';
+import 'package:bunnaapp/providers/analytics_provider.dart';
+import 'package:bunnaapp/providers/user_providers.dart';
+import 'package:bunnaapp/services/analytics_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../report/report.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
@@ -22,7 +28,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   File? pickedImage;
-  final auth = AuthService();
 
   Future<void> _pickImageFromGallery() async {
     final returnedImage =
@@ -63,6 +68,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final userRole = context.watch<UserProvider>().role;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -72,63 +79,43 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      drawer: Drawer(
-        backgroundColor: const Color(0xE4E9FFE9),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(131, 40, 124, 61),
-              ),
-              child: Text(
-                'Coffee Disease Classifier Application (CODICAP)',
-              ),
-            ),
-            ListTile(
-              title: const Text('History'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const History()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Account'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Account()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('About Us'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const About()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Log Out'),
-              onTap: () {
-                auth.signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignIn()),
-                  (route) => false,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: UserDrawer(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 150),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              if (userRole?.toLowerCase() ==
+                  'researcher') // Conditionally render the Dashboard button
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: 200,
+                    height: 48,
+                    child: TextButton(
+                      onPressed: () async {
+                        final analytics = await fetchAnalyticsData(context);
+                        if (analytics == true) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const Dashboard()),
+                          );
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.dashboard, size: 24),
+                          Text(
+                            "Dashboard",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: SizedBox(
@@ -215,31 +202,6 @@ class _HomeState extends State<Home> {
                         const Icon(Icons.report_problem, size: 24),
                         Text(
                           "Report Issues",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 200,
-                  height: 48,
-                  child: TextButton(
-                    onPressed: () async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-
-                      log('${prefs.getString('auth-token')}');
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.report_problem, size: 24),
-                        Text(
-                          "print",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],
