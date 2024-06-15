@@ -25,8 +25,10 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    final analyticsProvider = context.read<AnalyticsProvider>().analytics;
-    final pieData = analyticsProvider?.getPiechartData();
+    final pieData = [
+      ["disease1", "disease2", "disease3", "disease4", "disease5"],
+      [23.0, 17.0, 10.0, 35.0, 15.0]
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -62,9 +64,7 @@ class _DashboardState extends State<Dashboard> {
                           padding: const EdgeInsets.all(8.0),
                           child: Countup(
                             begin: 0,
-                            end: analyticsProvider?.totalDiseaseReport
-                                    .toDouble() ??
-                                0.0,
+                            end: 67,
                             suffix: "+images",
                             duration: const Duration(seconds: 3),
                             separator: ',',
@@ -139,8 +139,8 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
                       PieChartSample2(
-                        diseaseNames: pieData[0],
-                        percentages: pieData[1],
+                        diseaseNames: pieData[0] as List<String>,
+                        percentages: pieData[1] as List<double>,
                       ),
                       const Padding(
                         padding: EdgeInsets.all(16.0),

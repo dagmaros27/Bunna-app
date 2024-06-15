@@ -13,7 +13,6 @@ import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:bunnaapp/services/analytics_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../report/report.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
 import '../../themes.dart';
@@ -168,8 +167,7 @@ class _HomeState extends State<Home> {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const Informations()),
+                        MaterialPageRoute(builder: (context) => Informations()),
                       );
                     },
                     child: Row(
@@ -178,30 +176,6 @@ class _HomeState extends State<Home> {
                         const Icon(Icons.info, size: 24),
                         Text(
                           "Informations",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 200,
-                  height: 48,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const Report()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.report_problem, size: 24),
-                        Text(
-                          "Report Issues",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ],

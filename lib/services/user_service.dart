@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:bunnaapp/components/signin/sign_in.dart';
+import 'package:bunnaapp/models/models.dart';
+import 'package:bunnaapp/providers/epidemic_provider.dart';
 import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -52,12 +54,22 @@ Future<bool> login(
       final role = responseBody['occupation'];
       final userId = responseBody['user_id'];
 
+      //for test
+      final epidemics = responseBody["Epidemic Disease"];
+
+      final List<Disease> diseases =
+          (epidemics as List).map((i) => Disease.fromJson(i)).toList();
+
+      Provider.of<EpidemicProvider>(context, listen: false)
+          .setEpidemic(diseases);
+
       Provider.of<UserProvider>(context, listen: false).setUser(
         username: userName,
         role: role,
         authToken: authToken,
         userId: userId,
       );
+
       return true;
     } else {
       log('Auth token or user info not found in the response');
