@@ -54,15 +54,6 @@ Future<bool> login(
       final role = responseBody['occupation'];
       final userId = responseBody['user_id'];
 
-      //for test
-      final epidemics = responseBody["Epidemic Disease"];
-
-      final List<Disease> diseases =
-          (epidemics as List).map((i) => Disease.fromJson(i)).toList();
-
-      Provider.of<EpidemicProvider>(context, listen: false)
-          .setEpidemic(diseases);
-
       Provider.of<UserProvider>(context, listen: false).setUser(
         username: userName,
         role: role,
