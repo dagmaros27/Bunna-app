@@ -1,9 +1,12 @@
+import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:flutter/material.dart';
+import '../../models/models.dart';
+import '../../data/regions.dart';
 
 class UserProfilePage extends StatelessWidget {
-  final User user;
+  final user = User.dummyUser;
 
-  const UserProfilePage({required this.user});
+  UserProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +29,6 @@ class UserProfilePage extends StatelessWidget {
             const SizedBox(height: 16.0),
             _buildProfileInfo(context),
             const SizedBox(height: 32.0),
-            // Order History
-            Text(
-              'Order History',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 16.0),
-            _buildOrderHistory(context),
-            const SizedBox(height: 32.0),
             // Account Settings
             Text(
               'Account Settings',
@@ -52,37 +47,43 @@ class UserProfilePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         // Profile photo aligned to the center
-
-        Center(
+        const Center(
           child: CircleAvatar(
             radius: 40.0,
-            backgroundImage: AssetImage('assets/images/user.jpg'),
+            backgroundImage: AssetImage('assets/images/user.png'),
           ),
         ),
 
         ListTile(
-          leading:
-              Icon(Icons.person, color: Theme.of(context).colorScheme.primary),
-          title: Text(user.name, style: Theme.of(context).textTheme.bodyLarge),
+          leading: Icon(Icons.person, color: Theme.of(context).primaryColor),
+          title: Text("${user.firstName!} ${user.lastName!}",
+              style: Theme.of(context).textTheme.bodyLarge),
           subtitle: Text('Name', style: Theme.of(context).textTheme.bodySmall),
         ),
         ListTile(
-          leading:
-              Icon(Icons.email, color: Theme.of(context).colorScheme.primary),
-          title: Text(user.email, style: Theme.of(context).textTheme.bodyLarge),
+          leading: Icon(Icons.email, color: Theme.of(context).primaryColor),
+          title:
+              Text(user.email!, style: Theme.of(context).textTheme.bodyLarge),
           subtitle: Text('Email', style: Theme.of(context).textTheme.bodySmall),
         ),
         ListTile(
-          leading:
-              Icon(Icons.phone, color: Theme.of(context).colorScheme.primary),
-          title: Text(user.phone, style: Theme.of(context).textTheme.bodyLarge),
+          leading: Icon(Icons.phone, color: Theme.of(context).primaryColor),
+          title: Text(user.phoneNumber!,
+              style: Theme.of(context).textTheme.bodyLarge),
           subtitle: Text('Phone', style: Theme.of(context).textTheme.bodySmall),
         ),
         ListTile(
-          leading: Icon(Icons.location_on,
-              color: Theme.of(context).colorScheme.primary),
-          title:
-              Text(user.address, style: Theme.of(context).textTheme.bodyLarge),
+          leading: Icon(Icons.work, color: Theme.of(context).primaryColor),
+          title: Text(user.occupationType!,
+              style: Theme.of(context).textTheme.bodyLarge),
+          subtitle:
+              Text('Occupation', style: Theme.of(context).textTheme.bodySmall),
+        ),
+        ListTile(
+          leading:
+              Icon(Icons.location_on, color: Theme.of(context).primaryColor),
+          title: Text("${user.zone!} ${user.region!}",
+              style: Theme.of(context).textTheme.bodyLarge),
           subtitle:
               Text('Address', style: Theme.of(context).textTheme.bodySmall),
         ),
@@ -97,49 +98,15 @@ class UserProfilePage extends StatelessWidget {
                     builder: (context) => EditProfilePage(user: user)),
               );
             },
-            child: Text('Edit Profile'),
             style: ElevatedButton.styleFrom(
               padding:
                   const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
             ),
+            child: const Text('Edit Profile',
+                style: TextStyle(color: Colors.green)),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildOrderHistory(BuildContext context) {
-    // Placeholder for order history
-    // You would typically fetch this data from your backend
-    final List<Order> orders = [
-      Order(id: '123', date: '2023-06-01', total: 150.00, status: 'Delivered'),
-      Order(id: '124', date: '2023-05-15', total: 85.00, status: 'Shipped'),
-      Order(id: '125', date: '2023-04-22', total: 45.00, status: 'Processing'),
-    ];
-
-    return Column(
-      children: orders.map((order) {
-        return Card(
-          child: ListTile(
-            title: Text('Order #${order.id}',
-                style: Theme.of(context).textTheme.bodyLarge),
-            subtitle: Text(
-              '${order.date} - \$${order.total}',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            trailing: Text(order.status,
-                style: Theme.of(context).textTheme.bodyMedium),
-            onTap: () {
-              // Navigate to Order Details Page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => OrderDetailsPage(order: order)),
-              );
-            },
-          ),
-        );
-      }).toList(),
     );
   }
 
@@ -147,8 +114,7 @@ class UserProfilePage extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          leading:
-              Icon(Icons.lock, color: Theme.of(context).colorScheme.primary),
+          leading: Icon(Icons.lock, color: Theme.of(context).primaryColor),
           title: Text('Change Password',
               style: Theme.of(context).textTheme.bodyLarge),
           onTap: () {
@@ -161,13 +127,14 @@ class UserProfilePage extends StatelessWidget {
           },
         ),
         ListTile(
-          leading: Icon(Icons.exit_to_app,
-              color: Theme.of(context).colorScheme.primary),
+          leading:
+              Icon(Icons.exit_to_app, color: Theme.of(context).primaryColor),
           title: Text('Log Out', style: Theme.of(context).textTheme.bodyLarge),
           onTap: () {
             // Handle user logout
             // Navigate to Login Page
-            Navigator.pushReplacementNamed(context, '/login');
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const SignIn()));
           },
         ),
       ],
@@ -175,23 +142,54 @@ class UserProfilePage extends StatelessWidget {
   }
 }
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
   final User user;
 
   EditProfilePage({required this.user});
 
   @override
-  Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    String _name = user.name;
-    String _email = user.email;
-    String _phone = user.phone;
-    String _address = user.address;
+  _EditProfilePageState createState() => _EditProfilePageState();
+}
 
+class _EditProfilePageState extends State<EditProfilePage> {
+  final _formKey = GlobalKey<FormState>();
+  String? _firstName;
+  String? _lastName;
+  String? _email;
+  String? _phoneNumber;
+  String? _region;
+  String? _zone;
+  String? _occupationType;
+
+  final Map<String, List<String>> regionZones = Region_Zones;
+
+  final List<String> occupations = ['Researcher', 'Farmer'];
+
+  List<String> _zones = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _firstName = widget.user.firstName;
+    _lastName = widget.user.lastName;
+    _email = widget.user.email;
+    _phoneNumber = widget.user.phoneNumber;
+    _region = widget.user.region;
+    _zone = widget.user.zone;
+    _occupationType = widget.user.occupationType;
+    if (_region != null && regionZones.containsKey(_region)) {
+      _zones = regionZones[_region]!;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Edit Profile', style: Theme.of(context).textTheme.titleLarge),
+        title: Text(
+          'Edit Profile',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -201,15 +199,27 @@ class EditProfilePage extends StatelessWidget {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                initialValue: _name,
-                decoration: InputDecoration(labelText: 'Name'),
+                initialValue: _firstName,
+                decoration: InputDecoration(labelText: 'First Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return 'Please enter your first name';
                   }
                   return null;
                 },
-                onSaved: (value) => _name = value!,
+                onSaved: (value) => _firstName = value,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                initialValue: _lastName,
+                decoration: InputDecoration(labelText: 'Last Name'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your last name';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _lastName = value,
               ),
               const SizedBox(height: 16.0),
               TextFormField(
@@ -221,31 +231,90 @@ class EditProfilePage extends StatelessWidget {
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value!,
+                onSaved: (value) => _email = value,
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                initialValue: _phone,
-                decoration: InputDecoration(labelText: 'Phone'),
+                initialValue: _phoneNumber,
+                decoration: InputDecoration(labelText: 'Phone Number'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your phone number';
                   }
                   return null;
                 },
-                onSaved: (value) => _phone = value!,
+                onSaved: (value) => _phoneNumber = value,
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
-                initialValue: _address,
-                decoration: InputDecoration(labelText: 'Address'),
+              DropdownButtonFormField<String>(
+                value: _region,
+                decoration: InputDecoration(labelText: 'Region'),
+                items: regionZones.keys.map((String region) {
+                  return DropdownMenuItem<String>(
+                    value: region,
+                    child: Text(region),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _region = value;
+                    _zones = regionZones[value] ?? [];
+                    _zone = null; // Reset zone value
+                  });
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your address';
+                    return 'Please select your region';
                   }
                   return null;
                 },
-                onSaved: (value) => _address = value!,
+                onSaved: (value) => _region = value,
+              ),
+              const SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                value: _zone,
+                decoration: InputDecoration(labelText: 'Zone'),
+                items: _zones.map((String zone) {
+                  return DropdownMenuItem<String>(
+                    value: zone,
+                    child: Text(zone),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _zone = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your zone';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _zone = value,
+              ),
+              const SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                value: _occupationType,
+                decoration: InputDecoration(labelText: 'Occupation Type'),
+                items: occupations.map((String occupation) {
+                  return DropdownMenuItem<String>(
+                    value: occupation,
+                    child: Text(occupation),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _occupationType = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your occupation type';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _occupationType = value,
               ),
               const SizedBox(height: 32.0),
               Center(
@@ -258,10 +327,13 @@ class EditProfilePage extends StatelessWidget {
                       Navigator.pop(
                           context,
                           User(
-                            name: _name,
+                            firstName: _firstName,
+                            lastName: _lastName,
                             email: _email,
-                            phone: _phone,
-                            address: _address,
+                            phoneNumber: _phoneNumber,
+                            region: _region,
+                            zone: _zone,
+                            occupationType: _occupationType,
                           ));
                     }
                   },
@@ -362,73 +434,6 @@ class ChangePasswordPage extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// Models for User and Order
-class User {
-  String name;
-  String email;
-  String phone;
-  String address;
-
-  User({
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.address,
-  });
-}
-
-class Order {
-  String id;
-  String date;
-  double total;
-  String status;
-
-  Order({
-    required this.id,
-    required this.date,
-    required this.total,
-    required this.status,
-  });
-}
-
-// OrderDetailsPage is a placeholder for the order details page.
-class OrderDetailsPage extends StatelessWidget {
-  final Order order;
-
-  OrderDetailsPage({required this.order});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Order Details',
-            style: Theme.of(context).textTheme.titleLarge),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('Order ID: ${order.id}',
-                style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 8.0),
-            Text('Order Date: ${order.date}',
-                style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 8.0),
-            Text('Total Amount: \$${order.total}',
-                style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 8.0),
-            Text('Order Status: ${order.status}',
-                style: Theme.of(context).textTheme.bodyLarge),
-            // Add more details as needed
-          ],
         ),
       ),
     );

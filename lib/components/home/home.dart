@@ -94,13 +94,13 @@ class _HomeState extends State<Home> {
                     height: 48,
                     child: TextButton(
                       onPressed: () async {
-                        final analytics = await fetchAnalyticsData(context);
-                        if (analytics == true) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => const Dashboard()),
-                          );
-                        }
+                        // final analytics = await fetchAnalyticsData(context);
+                        // if (analytics == true) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const Dashboard()),
+                        );
+                        //}
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

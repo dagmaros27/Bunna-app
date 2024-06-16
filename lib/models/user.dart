@@ -79,4 +79,14 @@ class User {
       occupationType: json['occupation'],
     );
   }
+
+  static final dummyUser = User(
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      password: "password123",
+      phoneNumber: "1234567890",
+      region: "Dire Dawa",
+      zone: "Dire Dawa",
+      occupationType: "Researcher");
 }

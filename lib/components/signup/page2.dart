@@ -52,11 +52,11 @@ class _Page2State extends State<Page2> {
 
     signup(user) async {
       if (user.isValid()) {
-        final registered = await register(user);
-        if (registered == false) {
-          log("User created successfully");
-          _goToHome();
-        }
+        // final registered = await register(user);
+        // if (registered == false) {
+        //   log("User created successfully");
+        _goToHome();
+        // }
       } else {
         const snackBar = SnackBar(content: Text('Missing or Invalid input'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

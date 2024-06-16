@@ -15,18 +15,33 @@ class _AnalyticsState extends State<Analytics> {
   // Dummy data for bar charts
   final Map<String, List<List>> barData = {
     "Disease A": [
-      [10.0, 20.0, 30.0, 40.0], // Frequencies
+      [10, 20, 30, 40], // Frequencies
       ["Region 1", "Region 2", "Region 3", "Region 4"] // Regions
     ],
     "Disease B": [
-      [15.0, 25.0, 35.0, 45.0],
+      [15, 25, 35, 45],
       ["Region 1", "Region 2", "Region 3", "Region 4"]
     ],
     "Disease C": [
-      [20.0, 30.0, 40.0, 50.0],
+      [20, 30, 40, 50],
       ["Region 1", "Region 2", "Region 3", "Region 4"]
     ]
   };
+
+  List<String> shortenRegionNames(List<String> regions) {
+    return regions.map((region) {
+      if (region.length > 6) {
+        if (region.contains(' ')) {
+          List<String> words = region.split(' ');
+          return '${words.map((word) => word[0]).join('.')}.';
+        } else {
+          return region.substring(0, 6);
+        }
+      } else {
+        return region;
+      }
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +86,7 @@ class _AnalyticsState extends State<Analytics> {
                     log("$disease ${frequencies.length}");
                     return _buildBarChartSample(
                       frequencies: frequencies,
-                      regions: regions,
+                      regions: shortenRegionNames(regions),
                       barColor: Colors.blue,
                       title: disease,
                     );
