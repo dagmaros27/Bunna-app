@@ -1,5 +1,6 @@
 import 'package:bunnaapp/components/about/about.dart';
 import 'package:bunnaapp/components/account/account.dart';
+import 'package:bunnaapp/components/account/user_profile.dart';
 import 'package:bunnaapp/components/history/history.dart';
 import 'package:bunnaapp/components/home/home.dart';
 import 'package:bunnaapp/components/signin/sign_in.dart';
@@ -85,7 +86,7 @@ class UserDrawer extends StatelessWidget {
             title: const Text('Account'),
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Account()),
+                MaterialPageRoute(builder: (context) => UserProfilePage()),
               );
             },
           ),

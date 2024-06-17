@@ -1,10 +1,8 @@
 import 'dart:developer';
 
 import 'package:bunnaapp/components/drawer/user_drawer.dart';
-import 'package:bunnaapp/providers/analytics_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:bunnaapp/components/researcher/bar_graph.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class Analytics extends StatefulWidget {
   const Analytics({super.key});
@@ -14,11 +12,39 @@ class Analytics extends StatefulWidget {
 }
 
 class _AnalyticsState extends State<Analytics> {
+  // Dummy data for bar charts
+  final Map<String, List<List>> barData = {
+    "Disease A": [
+      [10, 20, 30, 40], // Frequencies
+      ["Region 1", "Region 2", "Region 3", "Region 4"] // Regions
+    ],
+    "Disease B": [
+      [15, 25, 35, 45],
+      ["Region 1", "Region 2", "Region 3", "Region 4"]
+    ],
+    "Disease C": [
+      [20, 30, 40, 50],
+      ["Region 1", "Region 2", "Region 3", "Region 4"]
+    ]
+  };
+
+  List<String> shortenRegionNames(List<String> regions) {
+    return regions.map((region) {
+      if (region.length > 6) {
+        if (region.contains(' ')) {
+          List<String> words = region.split(' ');
+          return '${words.map((word) => word[0]).join('.')}.';
+        } else {
+          return region.substring(0, 6);
+        }
+      } else {
+        return region;
+      }
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final analyticsProvider = context.read<AnalyticsProvider>().analytics;
-    final barData = analyticsProvider?.getBarData();
-    log("$barData");
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -60,7 +86,7 @@ class _AnalyticsState extends State<Analytics> {
                     log("$disease ${frequencies.length}");
                     return _buildBarChartSample(
                       frequencies: frequencies,
-                      regions: regions,
+                      regions: shortenRegionNames(regions),
                       barColor: Colors.blue,
                       title: disease,
                     );

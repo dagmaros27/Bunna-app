@@ -70,31 +70,31 @@ class AppTheme {
 
   static ThemeData light() {
     return ThemeData(
-      brightness: Brightness.light,
-      checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateColor.resolveWith(
-          (states) {
-            return const Color(0xFF4c6a4b);
-          },
+        brightness: Brightness.light,
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateColor.resolveWith(
+            (states) {
+              return const Color(0xFF4c6a4b);
+            },
+          ),
         ),
-      ),
-      appBarTheme: const AppBarTheme(
-        foregroundColor: Colors.black,
-        backgroundColor: Color(0XFFcfe2ce),
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        foregroundColor: Colors.white,
-        backgroundColor: Color(0xFF4c6a4b),
-      ),
-      textButtonTheme: TextButtonThemeData(
-          style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all(const Color(0xFF4c6a4b)),
-        backgroundColor: MaterialStateProperty.all(
-          const Color(0XFFcfe2ce),
+        appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.black,
+          backgroundColor: Color(0XFFcfe2ce),
         ),
-      )),
-      textTheme: lightTextTheme,
-    );
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          foregroundColor: Colors.white,
+          backgroundColor: Color(0xFF4c6a4b),
+        ),
+        textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(const Color(0xFF4c6a4b)),
+          backgroundColor: MaterialStateProperty.all(
+            const Color(0XFFcfe2ce),
+          ),
+        )),
+        textTheme: lightTextTheme,
+        primaryColor: const Color.fromARGB(255, 86, 199, 82));
   }
 
   static ThemeData dark() {
