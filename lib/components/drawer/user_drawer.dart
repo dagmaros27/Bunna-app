@@ -67,10 +67,10 @@ class UserDrawer extends StatelessWidget {
               size: 35.0,
             ),
             title: const Text('History'),
-            onTap: () {
+            onTap: () async {
               final history = context.read<HistoryProvider>().history;
               if (history.isEmpty) {
-                fetchHistoryData(context);
+                await fetchHistoryData(context);
               }
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const History()),
