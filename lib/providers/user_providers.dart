@@ -38,7 +38,7 @@ class UserProvider with ChangeNotifier {
   void _initializeDummyData() {
     _username = 'John Doe';
     _authToken = 'dummy_auth_token_12345';
-    _role = 'admin';
+    _role = 'researcher';
     _userId = 1;
   }
 }

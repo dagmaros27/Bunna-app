@@ -16,7 +16,7 @@ import '../models/models.dart';
 
 class EpidemicProvider with ChangeNotifier {
   EpidemicProvider() {
-    // _initializeDummyData();
+    _initializeDummyData();
   }
 
   List<Disease>? _diseases;

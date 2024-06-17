@@ -69,6 +69,7 @@ Future<bool> login(
         authToken: authToken,
         userId: userId,
       );
+
       return true;
     } else {
       log('Auth token or user info not found in the response');

@@ -14,7 +14,6 @@ import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:bunnaapp/services/analytics_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../report/report.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
 import '../../themes.dart';
@@ -86,149 +85,113 @@ class _HomeState extends State<Home> {
         ),
       ),
       drawer: UserDrawer(),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 150),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              LangOption(),
+              if (userRole?.toLowerCase() ==
+                  'researcher') // Conditionally render the Dashboard button
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: 200,
+                    height: 48,
+                    child: TextButton(
+                      onPressed: () async {
+                        // final analytics = await fetchAnalyticsData(context);
+                        // if (analytics == true) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const Dashboard()),
+                        );
+                        //}
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.dashboard, size: 24),
+                          Text(
+                            "Dashboard",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 200,
+                  height: 48,
+                  child: TextButton(
+                    onPressed: () {
+                      _pickImageFromCamera();
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.camera_alt, size: 24),
+                        Text(
+                          "Direct Scan",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 200,
+                  height: 48,
+                  child: TextButton(
+                    onPressed: () {
+                      _pickImageFromGallery();
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.image, size: 24),
+                        Text(
+                          "Upload Image",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 200,
+                  height: 48,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Informations()),
+                      );
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.info, size: 24),
+                        Text(
+                          "Informations",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 130),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  if (userRole?.toLowerCase() ==
-                      'researcher') // Conditionally render the Dashboard button
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SizedBox(
-                        width: 200,
-                        height: 48,
-                        child: TextButton(
-                          onPressed: () async {
-                            final analytics = await fetchAnalyticsData(context);
-                            if (analytics == true) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => const Dashboard()),
-                              );
-                            }
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.dashboard, size: 24),
-                              Text(
-                                "Dashboard",
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: 200,
-                      height: 48,
-                      child: TextButton(
-                        onPressed: () {
-                          _pickImageFromCamera();
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.camera_alt, size: 24),
-                            Text(
-                              "Direct Scan",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: 200,
-                      height: 48,
-                      child: TextButton(
-                        onPressed: () {
-                          _pickImageFromGallery();
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.image, size: 24),
-                            Text(
-                              "Upload Image",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: 200,
-                      height: 48,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => const Informations()),
-                          );
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.info, size: 24),
-                            Text(
-                              "Informations",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SizedBox(
-                      width: 200,
-                      height: 48,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => const Report()),
-                          );
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.report_problem, size: 24),
-                            Text(
-                              "Report Issues",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
