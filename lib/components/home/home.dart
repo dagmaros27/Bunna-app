@@ -100,13 +100,15 @@ class _HomeState extends State<Home> {
                     height: 48,
                     child: TextButton(
                       onPressed: () async {
-                        // final analytics = await fetchAnalyticsData(context);
-                        // if (analytics == true) {
+                        final analytics =
+                            context.read<AnalyticsProvider>().analytics;
+                        if (analytics == null) {
+                          await fetchAnalyticsData(context);
+                        }
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const Dashboard()),
                         );
-                        //}
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

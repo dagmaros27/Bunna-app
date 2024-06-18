@@ -21,7 +21,21 @@ class _ImageProcessingState extends State<ImageProcessing> {
   bool _showProcessingCard = false;
 
   _sendData() async {
-    processImage(widget.imageFile, context);
+    String? errorMessage = await processImage(widget.imageFile, context);
+
+    if (errorMessage != null) {
+      // If there is an error message, show it in a SnackBar
+      final snackBar = SnackBar(
+        content: Text(errorMessage),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // Reset _showProcessingCard to false to allow retry
+      setState(() {
+        _showProcessingCard = false;
+      });
+    }
   }
 
   @override
@@ -62,7 +76,6 @@ class _ImageProcessingState extends State<ImageProcessing> {
                       _showProcessingCard = true;
                     });
                     _sendData();
-                    log("pressed");
                   },
                   child: const Text("Process Image"),
                 ),

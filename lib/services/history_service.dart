@@ -32,12 +32,13 @@ Future<void> fetchHistoryData(BuildContext context) async {
 
     log('Response status: ${response.statusCode}');
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       final List<dynamic> reports = responseBody['report'];
 
       for (var reportData in reports) {
         final Report report = Report.fromJson(reportData);
+
         final DiseaseInfo diseaseInfo = DiseaseInfo.fromJson(reportData);
 
         context.read<HistoryProvider>().addResult(Result(

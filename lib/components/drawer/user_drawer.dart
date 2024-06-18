@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:bunnaapp/components/about/about.dart';
 import 'package:bunnaapp/components/account/account.dart';
 import 'package:bunnaapp/components/account/user_profile.dart';
+import 'package:bunnaapp/components/faq/faq.dart';
 import 'package:bunnaapp/components/history/history.dart';
 import 'package:bunnaapp/components/home/home.dart';
 import 'package:bunnaapp/components/signin/sign_in.dart';
@@ -84,10 +87,14 @@ class UserDrawer extends StatelessWidget {
               size: 35.0,
             ),
             title: const Text('Account'),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => UserProfilePage()),
-              );
+            onTap: () async {
+              final user = await getUser(context);
+              if (user != null) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => UserProfilePage(user: user)),
+                );
+              }
             },
           ),
           ListTile(
@@ -99,6 +106,18 @@ class UserDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const About()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.question_mark_rounded,
+              size: 35.0,
+            ),
+            title: const Text('FAQ'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const FAQPage()),
               );
             },
           ),

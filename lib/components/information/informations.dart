@@ -43,25 +43,32 @@ class _InformationPageState extends State<Informations> {
     final diseases = Provider.of<EpidemicProvider>(context).diseases;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Epidemic Information'),
-      ),
-      body: diseases == null || diseases.isEmpty
-          ? Center(child: Text('No epidemic diseases reported.'))
-          : ListView.builder(
-              itemCount: diseases.length,
-              itemBuilder: (context, index) {
-                final disease = diseases[index];
-                return Card(
-                  margin: EdgeInsets.all(10.0),
-                  child: ListTile(
-                    title: Text(disease.diseaseName,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Reported cases: ${disease.reported}'),
-                  ),
-                );
-              },
+        appBar: AppBar(
+          title: Text('Epidemic Information'),
+        ),
+        body: Column(
+          children: [
+            Text(
+              "Epidemic diseases",
+              style: TextStyle(fontSize: 24, color: Colors.grey),
             ),
-    );
+            diseases == null || diseases.isEmpty
+                ? Center(child: Text('No epidemic diseases reported.'))
+                : ListView.builder(
+                    itemCount: diseases.length,
+                    itemBuilder: (context, index) {
+                      final disease = diseases[index];
+                      return Card(
+                        margin: EdgeInsets.all(10.0),
+                        child: ListTile(
+                          title: Text(disease.diseaseName,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Text('Reported cases: ${disease.reported}'),
+                        ),
+                      );
+                    },
+                  ),
+          ],
+        ));
   }
 }

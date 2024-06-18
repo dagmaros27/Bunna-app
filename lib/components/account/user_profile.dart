@@ -1,15 +1,20 @@
+import 'dart:developer';
+
 import 'package:bunnaapp/components/signin/sign_in.dart';
+import 'package:bunnaapp/providers/user_providers.dart';
+import 'package:bunnaapp/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../data/regions.dart';
 
 class UserProfilePage extends StatelessWidget {
-  final user = User.dummyUser;
-
-  UserProfilePage({super.key});
+  final user;
+  UserProfilePage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
+    log(user.firstName);
     return Scaffold(
       appBar: AppBar(
         title:
@@ -68,7 +73,7 @@ class UserProfilePage extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(Icons.phone, color: Theme.of(context).primaryColor),
-          title: Text(user.phoneNumber!,
+          title: Text(user.phoneNumber! as String,
               style: Theme.of(context).textTheme.bodyLarge),
           subtitle: Text('Phone', style: Theme.of(context).textTheme.bodySmall),
         ),
@@ -82,7 +87,7 @@ class UserProfilePage extends StatelessWidget {
         ListTile(
           leading:
               Icon(Icons.location_on, color: Theme.of(context).primaryColor),
-          title: Text("${user.zone!} ${user.region!}",
+          title: Text("${user.zone!}, ${user.region!}",
               style: Theme.of(context).textTheme.bodyLarge),
           subtitle:
               Text('Address', style: Theme.of(context).textTheme.bodySmall),
@@ -131,10 +136,7 @@ class UserProfilePage extends StatelessWidget {
               Icon(Icons.exit_to_app, color: Theme.of(context).primaryColor),
           title: Text('Log Out', style: Theme.of(context).textTheme.bodyLarge),
           onTap: () {
-            // Handle user logout
-            // Navigate to Login Page
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const SignIn()));
+            logout(context);
           },
         ),
       ],
@@ -223,6 +225,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
+                readOnly: true,
                 initialValue: _email,
                 decoration: InputDecoration(labelText: 'Email'),
                 validator: (value) {
@@ -236,6 +239,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(height: 16.0),
               TextFormField(
                 initialValue: _phoneNumber,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Phone Number'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -319,22 +323,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const SizedBox(height: 32.0),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // Save profile information
-                      // Navigate back to Profile Page with updated user info
-                      Navigator.pop(
-                          context,
-                          User(
-                            firstName: _firstName,
-                            lastName: _lastName,
-                            email: _email,
-                            phoneNumber: _phoneNumber,
-                            region: _region,
-                            zone: _zone,
-                            occupationType: _occupationType,
-                          ));
+                      final updatedUser = User(
+                        firstName: _firstName,
+                        lastName: _lastName,
+                        email: _email,
+                        phoneNumber: _phoneNumber,
+                        region: _region,
+                        zone: _zone,
+                        occupationType: _occupationType,
+                      );
+                      final updated = await updateUser(updatedUser, context);
+                      if (updated == true) {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      } else {
+                        const snackBar =
+                            SnackBar(content: Text('Missing or Invalid input'));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     }
                   },
                   child: Text('Save'),
@@ -352,23 +361,34 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 }
 
-class ChangePasswordPage extends StatelessWidget {
+class ChangePasswordPage extends StatefulWidget {
   final User user;
 
   ChangePasswordPage({required this.user});
 
   @override
-  Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    String _oldPassword = '';
-    String _newPassword = '';
-    String _confirmPassword = '';
+  _ChangePasswordPageState createState() => _ChangePasswordPageState();
+}
 
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final _formKey = GlobalKey<FormState>();
+  String _oldPassword = '';
+  String _newPassword = '';
+  String _confirmPassword = '';
+  bool _oldPasswordVisible = false;
+  bool _newPasswordVisible = false;
+  bool _confirmPasswordVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Change Password',
-            style: Theme.of(context).textTheme.titleLarge),
-        centerTitle: true,
+        title: Center(
+          child: Text(
+            "CODICAP",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -377,8 +397,22 @@ class ChangePasswordPage extends StatelessWidget {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Old Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Old Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _oldPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _oldPasswordVisible = !_oldPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: !_oldPasswordVisible,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your old password';
@@ -389,8 +423,22 @@ class ChangePasswordPage extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                decoration: InputDecoration(labelText: 'New Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'New Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _newPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _newPasswordVisible = !_newPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: !_newPasswordVisible,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your new password';
@@ -401,18 +449,38 @@ class ChangePasswordPage extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Confirm New Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirm New Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _confirmPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _confirmPasswordVisible = !_confirmPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: !_confirmPasswordVisible,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please confirm your new password';
                   }
-                  if (value != _newPassword) {
+                  if (value == _newPassword) {
+                    log("$_newPassword ... $value");
+
                     return 'Passwords do not match';
                   }
                   return null;
                 },
-                onSaved: (value) => _confirmPassword = value!,
+                onChanged: (value) {
+                  setState(() {
+                    _confirmPassword = value;
+                  });
+                },
               ),
               const SizedBox(height: 32.0),
               Center(
@@ -420,9 +488,17 @@ class ChangePasswordPage extends StatelessWidget {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // Change password logic
-                      // Navigate back to Profile Page
-                      Navigator.pop(context);
+                      final changed =
+                          changePassword(context, _oldPassword, _newPassword);
+                      if (changed == false) {
+                        const snackBar = SnackBar(
+                          content: Text('Some error occurred'),
+                          backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        Navigator.pop(context);
+                      }
                     }
                   },
                   child: Text('Change Password'),

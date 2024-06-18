@@ -27,7 +27,7 @@ class Report {
   factory Report.fromJson(Map<String, dynamic> json) {
     return Report(
       status: json['status'] ?? 'Completed',
-      timeStamp: json['image_TimeStamp'] ?? '',
+      timeStamp: json['timestamp'] ?? '',
       diseases: json['disease_name'] ?? '',
       location: json['region'] ?? '',
       severity: json['severity'] ?? '',

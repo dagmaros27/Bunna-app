@@ -95,7 +95,7 @@ class _AccountState extends State<Account> {
                       zone: zoneController.text,
                       occupationType: occupationController.text,
                     );
-                    final updated = await updateUser(newUser);
+                    final updated = await updateUser(newUser, context);
                     if (updated == true) {
                       Navigator.of(context).pop();
                     } else {

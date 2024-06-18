@@ -6,7 +6,7 @@ class ResultProvider with ChangeNotifier {
 
   ResultProvider() {
     // Initialize with dummy data
-    _initializeDummyData();
+    // _initializeDummyData();
   }
 
   Result? get result => _result;
@@ -25,16 +25,19 @@ class ResultProvider with ChangeNotifier {
     final dummyReport = Report(
       status: 'Completed',
       timeStamp: '2024-05-01 10:00:00',
-      diseases: 'Disease A, Disease B',
-      location: 'Location X',
-      severity: 'High',
+      diseases: 'Miner',
+      location: 'Amhara',
+      severity: 'moderate',
       confidenceLevel: 0.95,
     );
 
     final dummyDiseaseInfo = DiseaseInfo(
-      diagnosis: 'Diagnosis A',
-      recommendations: 'Recommendation A1, Recommendation A2',
-      additional: 'Additional Info A',
+      diagnosis:
+          'The coffee leaf miner larvae tunnel through the leaf tissues, creating serpentine mines. These mines appear as whitish or silverish trails on the leaves. Infested leaves may curl, turn yellow, and drop prematurely. Severe infestations can lead to reduced photosynthesis and decreased yields.',
+      recommendations:
+          'Integrated pest management (IPM) practices are commonly used to control coffee leaf miners. This involves a combination of cultural, biological, and chemical control methods. Cultural practices include maintaining good plant nutrition and hygiene, pruning affected branches, and destroying infested leaves. Biological control involves promoting natural enemies of the leaf miner, such as parasitic wasps. Insecticides can be used if necessary, but their application should follow sustainable practices and be based on expert advice.',
+      additional:
+          'The coffee leaf miner is a small insect pest that affects coffee plants. It is the larval stage of the moth Leucoptera coffeella.',
     );
 
     _result = Result(report: dummyReport, diseaseInfo: dummyDiseaseInfo);

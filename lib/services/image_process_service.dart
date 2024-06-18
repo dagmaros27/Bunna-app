@@ -11,8 +11,8 @@ import '../providers/user_providers.dart';
 import '../utils/urls.dart';
 
 String backendUrl = GlobalUrl.rootUrl;
-Future<Map<String, dynamic>?> processImage(
-    File imageFile, BuildContext context) async {
+
+Future<String?> processImage(File imageFile, BuildContext context) async {
   final url = Uri.parse('$backendUrl/coffee-disease-detection');
 
   final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -20,7 +20,7 @@ Future<Map<String, dynamic>?> processImage(
 
   if (authToken == null) {
     log('Auth token not found');
-    return null;
+    return 'Auth token not found';
   }
 
   var request = http.MultipartRequest('POST', url);
@@ -33,19 +33,24 @@ Future<Map<String, dynamic>?> processImage(
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();
       var jsonResponse = jsonDecode(responseBody);
+      if (jsonResponse['class'] != null) {
+        return "Image contains anomaly try to take another picture";
+      } else {
+        var report = Report.fromJson(jsonResponse);
+        var diseaseInfo = DiseaseInfo.fromJson(jsonResponse);
 
-      var report = Report.fromJson(jsonResponse);
-      var diseaseInfo = DiseaseInfo.fromJson(jsonResponse);
+        Provider.of<ResultProvider>(context, listen: false)
+            .setResult(Result(diseaseInfo: diseaseInfo, report: report));
 
-      Provider.of<ResultProvider>(context, listen: false)
-          .setResult(Result(diseaseInfo: diseaseInfo, report: report));
+        return null; // No error
+      }
     } else {
       var responseBody = await response.stream.bytesToString();
       log('Failed to process image: $responseBody');
-      return null;
+      return 'Failed to process image: ${jsonDecode(responseBody)['error'] ?? 'Unknown error'}';
     }
   } catch (e) {
     log('Exception while processing image: $e');
-    return null;
+    return 'Network or server error, try again!';
   }
 }

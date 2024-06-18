@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:bunnaapp/models/analytics.dart';
-import 'package:bunnaapp/providers/analytics_provider.dart';
-import 'package:bunnaapp/providers/user_providers.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+
+import '../models/analytics.dart';
+import '../providers/analytics_provider.dart';
+import '../providers/user_providers.dart';
 import '../utils/urls.dart';
 
 String backendUrl = GlobalUrl.rootUrl;
@@ -31,34 +33,29 @@ Future<bool> fetchAnalyticsData(BuildContext context) async {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
+      final reports = jsonResponse['Total disease Report'];
+      log(reports.toString());
 
-      final List<Disease> countByDisease =
-          (jsonResponse['Count by disease'] as List)
-              .map((i) => Disease.fromJson(i))
-              .toList();
+      final List<Disease> countByDisease = (reports['count_by_disease'] as List)
+          .map((i) => Disease.fromJson(i))
+          .toList();
 
-      final List<Region> countByRegion =
-          (jsonResponse['Count by region'] as List)
-              .map((i) => Region.fromJson(i))
-              .toList();
+      final List<Region> countByRegion = (reports['count_by_region'] as List)
+          .map((i) => Region.fromJson(i))
+          .toList();
 
-      final Map<String, dynamic> prevalencyJson =
-          jsonResponse['prevalency per region'];
       final Map<String, List<DiseasePrevalency>> prevalencyMap = {};
+      final prevalencyJson =
+          reports['prevalence_per_region'] as Map<String, dynamic>;
 
       prevalencyJson.forEach((key, value) {
-        final List<dynamic> diseasePrevalencyList = value;
         final List<DiseasePrevalency> diseasePrevalency = [];
 
-        diseasePrevalencyList.forEach((element) {
-          final String count =
-              element['count'].toString(); // Convert int to string
-          final String region = element['region'];
-
+        (value as List<dynamic>).forEach((element) {
           diseasePrevalency.add(DiseasePrevalency(
             disease: key,
-            count: count,
-            region: region,
+            count: element['count'].toString(),
+            region: element['region'],
           ));
         });
 
@@ -66,7 +63,7 @@ Future<bool> fetchAnalyticsData(BuildContext context) async {
       });
 
       final analytics = Analytics(
-        totalDiseaseReport: jsonResponse['Total disease Report'],
+        totalDiseaseReport: reports['total_reports'],
         countByDisease: countByDisease,
         countByRegion: countByRegion,
         prevalency: prevalencyMap,

@@ -1,5 +1,7 @@
+import 'package:bunnaapp/providers/result_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../result/results.dart';
 
 class ProcessingCard extends StatelessWidget {
@@ -7,39 +9,35 @@ class ProcessingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String status = "processing";
-    int remainingMinutes = 12;
+    final resultProvider = Provider.of<ResultProvider>(context, listen: true);
+    final disable = resultProvider.result == null;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding:
-              const EdgeInsets.only(top: 16, left: 16, bottom: 16, right: 16),
+          padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             width: 360, // Adjust this width as needed
             child: LinearPercentIndicator(
               animation: true,
               lineHeight: 20.0,
-              animationDuration: 2000,
+              animationDuration: 5000,
               percent: 0.9,
-              center: const Text("Processing image(90.0%)"),
+              center:
+                  Text(disable ? "Processing image..." : "finished processing"),
               barRadius: const Radius.circular(12),
               progressColor: Colors.green.shade800,
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            left: 72,
-            bottom: 16,
-          ),
+          padding: const EdgeInsets.only(left: 72, bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Status: $status"),
-              Text("Remaining Time: $remainingMinutes min")
+              Text("Status: ${disable ? "processing" : "completed"}"),
             ],
           ),
         ),
@@ -49,16 +47,19 @@ class ProcessingCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               TextButton(
-                onPressed: () {
-                  // TODO: add functionality to show result once the processing finished
-                  //disable the button unless
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Results()),
-                  );
-                },
+                onPressed: disable
+                    ? null
+                    : () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const Results()),
+                        );
+                      },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: const Size(120, 50),
+                  backgroundColor: disable ? Colors.grey : null,
                 ),
                 child: const Center(child: Text("Result")),
               ),
@@ -68,19 +69,18 @@ class ProcessingCard extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(120, 50),
-                    backgroundColor: Colors.red.shade400,
-                    foregroundColor: Colors.white),
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(120, 50),
+                  backgroundColor: Colors.red.shade400,
+                  foregroundColor: Colors.white,
+                ),
                 child: const Center(
-                  child: Text(
-                    "Cancel",
-                  ),
+                  child: Text("Cancel"),
                 ),
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

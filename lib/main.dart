@@ -1,7 +1,10 @@
 import 'package:bunnaapp/components/account/account.dart';
+import 'package:bunnaapp/components/faq/faq.dart';
+import 'package:bunnaapp/components/forgetPassword/forgetPassword.dart';
 import 'package:bunnaapp/components/history/history.dart';
 import 'package:bunnaapp/components/home/home.dart';
 import 'package:bunnaapp/components/researcher/dashboard.dart';
+import 'package:bunnaapp/components/result/results.dart';
 import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:bunnaapp/providers/analytics_provider.dart';
 import 'package:bunnaapp/providers/epidemic_provider.dart';
@@ -45,7 +48,7 @@ class Bunna extends StatelessWidget {
       // Coffee disease classifier application
       debugShowCheckedModeBanner: false,
       title: "CODICAP",
-      home: const Home(),
+      home: SignIn(),
 
       theme: theme,
     );

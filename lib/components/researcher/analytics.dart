@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:bunnaapp/components/drawer/user_drawer.dart';
 import 'package:bunnaapp/components/researcher/bar_graph.dart';
+import 'package:bunnaapp/providers/analytics_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Analytics extends StatefulWidget {
   const Analytics({super.key});
@@ -12,22 +14,6 @@ class Analytics extends StatefulWidget {
 }
 
 class _AnalyticsState extends State<Analytics> {
-  // Dummy data for bar charts
-  final Map<String, List<List>> barData = {
-    "Disease A": [
-      [10, 20, 30, 40], // Frequencies
-      ["Region 1", "Region 2", "Region 3", "Region 4"] // Regions
-    ],
-    "Disease B": [
-      [15, 25, 35, 45],
-      ["Region 1", "Region 2", "Region 3", "Region 4"]
-    ],
-    "Disease C": [
-      [20, 30, 40, 50],
-      ["Region 1", "Region 2", "Region 3", "Region 4"]
-    ]
-  };
-
   List<String> shortenRegionNames(List<String> regions) {
     return regions.map((region) {
       if (region.length > 6) {
@@ -45,6 +31,8 @@ class _AnalyticsState extends State<Analytics> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, List<List>> barData =
+        context.read<AnalyticsProvider>().analytics?.getBarData();
     return Scaffold(
       appBar: AppBar(
         title: Center(

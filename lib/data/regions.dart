@@ -1,14 +1,5 @@
 final Map<String, List<String>> Region_Zones = {
-  'Afar Region': [
-    'Awsi Rasu',
-    'Kilbet Rasu',
-    'Gabi Rasu',
-    'Fanti Rasu',
-    'Hari Rasu',
-    'Mahi Rasu (New Zone)',
-    'Argobba (special woreda)'
-  ],
-  'Amhara Region': [
+  'Amhara': [
     'Agew Awi',
     'East Gojjam',
     'North Gondar',
@@ -21,36 +12,7 @@ final Map<String, List<String>> Region_Zones = {
     'North Wollo',
     'South Wollo'
   ],
-  'Benishangul-Gumuz Region': [
-    'Asosa',
-    'Kamashi',
-    'Metekel',
-  ],
-  'Central Ethiopia Region': [
-    'East Gurage Zone',
-    'Gurage Zone',
-    'Halaba Zone',
-    'Hadiya Zone',
-    'Kebena Special Woreda',
-    'Kembata Zone',
-    'Mareko Special Woreda',
-    'Silt\'e Zone',
-    'Tembaro Special Woreda',
-    'Yem Zone',
-  ],
-  'Dire Dawa': [
-    'Dire Dawa',
-  ],
-  'Gambela Region': [
-    'Anywaa',
-    'Majang',
-    'Nuer',
-    'Administrative Zone 1 (Gambela)',
-    'Administrative Zone 2 (Gambela)',
-    'Administrative Zone 3 (Gambela)',
-    'Godere (woreda)',
-  ],
-  'Harari Region': [
+  'Harari': [
     'Amir-Nur Woreda',
     'Abadir Woreda',
     'Shenkor Woreda',
@@ -61,7 +23,7 @@ final Map<String, List<String>> Region_Zones = {
     'Erer Woreda',
     'Dire-Teyara Woreda',
   ],
-  'Oromia Region': [
+  'Oromia': [
     'East Arsi',
     'West Arsi',
     'East Bale',
@@ -86,46 +48,13 @@ final Map<String, List<String>> Region_Zones = {
     'Burayu Special Zone',
     'Borana',
   ],
-  'Sidama Region': [
+  'Sidama': [
     'Central Sidama Zone',
     'Eastern Sidama Zone',
     'Northern Sidama Zone',
     'Southern Sidama Zone',
   ],
-  'Somali Region': [
-    'Sitti Zone',
-    'Fafan Zone',
-    'Jarar Zone',
-    'Erer Zone',
-    'Nogob Zone',
-    'Dollo Zone',
-    'Korahe Zone',
-    'Shabelle Zone',
-    'Afder Zone',
-    'Liben Zone',
-    'Dhawa Zone',
-    'Jigjiga Special Zone',
-    'Tog Wajale Special Zone',
-    'Degehabur Special Zone',
-    'Gode Special Zone',
-    'Kebri Beyah Special Zone',
-    'Kebri Dahar Special Zone',
-  ],
-  'South Ethiopia Region': [
-    'Ale Zone',
-    'Amaro Zone',
-    'Ari Zone',
-    'Basketo Zone',
-    'Burji Zone',
-    'Dirashe Zone',
-    'Gamo Zone',
-    'Gedeo Zone',
-    'Gofa Zone',
-    'Konso Zone',
-    'South Omo Zone',
-    'Wolayita Zone',
-  ],
-  'Southwest Ethiopia Peoples’ Region': [
+  'Southwest Ethiopia Peoples’': [
     'Bench Sheko Zone',
     'Dawro Zone',
     'Keffa Zone',
@@ -133,16 +62,4 @@ final Map<String, List<String>> Region_Zones = {
     'Konta Zone',
     'West Omo Zone',
   ],
-  'Tigray Region': [
-    'Central Tigray',
-    'East Tigray',
-    'North West Tigray',
-    'South Tigray',
-    'South East Tigray',
-    'West Tigray',
-    'Mekele (special zone)',
-  ],
-  'Addis Ababa': [
-    'Addis Ababa',
-  ]
 };

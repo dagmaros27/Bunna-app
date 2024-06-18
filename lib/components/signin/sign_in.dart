@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:bunnaapp/components/forgetPassword/forgetPassword.dart';
 import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:bunnaapp/components/researcher/dashboard.dart';
@@ -80,6 +81,26 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(" "),
+                    GestureDetector(
+                      child: const Text(
+                        "Forgot Password?",
+                        style: TextStyle(color: Color(0xFF00B115)),
+                      ),
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPasswordPage()),
+                          (route) => false,
+                        );
+                      },
+                    )
+                  ],
+                ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -152,8 +173,9 @@ class _SignInState extends State<SignIn> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
-      //final loggedIn = await login(email: email, password: password, context: context);
-      final loggedIn = true;
+      final loggedIn =
+          await login(email: email, password: password, context: context);
+      //final loggedIn = true;
 
       if (loggedIn == true) {
         goToHome(context, context.read<UserProvider>().role ?? "user");

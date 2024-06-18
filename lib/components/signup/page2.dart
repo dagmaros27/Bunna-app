@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../home/home.dart';
 import '../../models/user.dart';
 import "page1.dart";
+import '../../data/regions.dart';
 
 class SignUp2 extends StatelessWidget {
   final User user;
@@ -40,7 +41,8 @@ class _Page2State extends State<Page2> {
   String? regionValue;
   String? zoneValue;
   String? occupationValue;
-
+  final Map<String, List<String>> regionZones = Region_Zones;
+  List<String> _zones = [];
   final TextEditingController phoneController = TextEditingController();
 
   @override
@@ -52,11 +54,14 @@ class _Page2State extends State<Page2> {
 
     signup(user) async {
       if (user.isValid()) {
-        // final registered = await register(user);
-        // if (registered == false) {
-        //   log("User created successfully");
-        _goToHome();
-        // }
+        final registered = await register(user);
+        if (registered == true) {
+          log("User created successfully");
+          _goToHome();
+        } else {
+          const snackBar = SnackBar(content: Text('Registration failed'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       } else {
         const snackBar = SnackBar(content: Text('Missing or Invalid input'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -123,52 +128,62 @@ class _Page2State extends State<Page2> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: DropdownMenu<String>(
-                          hintText: "Region",
-                          onSelected: (String? newValue) {
-                            setState(() {
-                              regionValue = newValue;
-                            });
-                          },
-                          dropdownMenuEntries: <String>[
-                            'Gurage',
-                            'Guji',
-                            'Gonder',
-                            'Gojam',
-                            'Arsi'
-                          ].map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                              value: value,
-                              label: (value),
-                            );
-                          }).toList(),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16),
+                          child: DropdownButtonFormField<String>(
+                            value: regionValue,
+                            decoration: InputDecoration(labelText: 'Region'),
+                            items: regionZones.keys.map((String region) {
+                              return DropdownMenuItem<String>(
+                                value: region,
+                                child: Text(region),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                regionValue = value;
+                                _zones = regionZones[value] ?? [];
+                                zoneValue = null; // Reset zone value
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select your region';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) => regionValue = value,
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: DropdownMenu<String>(
-                          hintText: "Zone",
-                          onSelected: (String? newValue) {
-                            setState(() {
-                              zoneValue = newValue;
-                            });
-                          },
-                          dropdownMenuEntries: <String>[
-                            'Gurage',
-                            'Guji',
-                            'Gonder',
-                            'Gojam',
-                            'Arsi'
-                          ].map<DropdownMenuEntry<String>>((String value) {
-                            return DropdownMenuEntry<String>(
-                              value: value,
-                              label: (value),
-                            );
-                          }).toList(),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 16),
+                          child: DropdownButtonFormField<String>(
+                            value: zoneValue,
+                            decoration: InputDecoration(labelText: 'Zone'),
+                            items: _zones.map((String zone) {
+                              return DropdownMenuItem<String>(
+                                value: zone,
+                                child: Text(zone),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                zoneValue = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select your zone';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) => zoneValue = value,
+                          ),
                         ),
                       ),
                     ],
@@ -214,8 +229,9 @@ class _Page2State extends State<Page2> {
                         signup(widget.user);
                       },
                       child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Center(child: Text("Register"))),
+                        padding: EdgeInsets.all(8.0),
+                        child: Center(child: Text("Register")),
+                      ),
                     ),
                   ),
                 ],

@@ -12,7 +12,7 @@ class UserProvider with ChangeNotifier {
   int? get userId => _userId;
 
   UserProvider() {
-    _initializeDummyData();
+    // _initializeDummyData();
   }
 
   void setUser(
