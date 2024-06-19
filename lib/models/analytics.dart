@@ -3,6 +3,7 @@ import 'dart:developer';
 
 class Analytics {
   int totalDiseaseReport;
+  double averageConfidence;
   List<Disease> countByDisease;
   List<Region> countByRegion;
   Map<String, List<DiseasePrevalency>> prevalency;
@@ -19,11 +20,13 @@ class Analytics {
       {required this.countByDisease,
       required this.countByRegion,
       required this.totalDiseaseReport,
+      required this.averageConfidence,
       required this.prevalency});
 
   factory Analytics.fromJson(Map<String, dynamic> json) {
     return Analytics(
       totalDiseaseReport: json['Total disease Report'],
+      averageConfidence: json['Average Confidence'],
       countByDisease: (json['Count by disease'] as List)
           .map((i) => Disease.fromJson(i))
           .toList(),
@@ -42,6 +45,7 @@ class Analytics {
   Map<String, dynamic> toJson() {
     return {
       'Total disease Report': totalDiseaseReport,
+      'Average Confidence': averageConfidence,
       'Count by disease': countByDisease.map((i) => i.toJson()).toList(),
       'Count by region': countByRegion.map((i) => i.toJson()).toList(),
       'prevalency per region': prevalency.map(
@@ -138,7 +142,7 @@ class Region {
 
 class DiseasePrevalency {
   final String disease;
-  final String count; // Change type to String
+  final String count;
   final String region;
 
   DiseasePrevalency({
@@ -150,7 +154,7 @@ class DiseasePrevalency {
   factory DiseasePrevalency.fromJson(Map<String, dynamic> json) {
     return DiseasePrevalency(
       disease: json['disease'],
-      count: json['count'].toString(), // Convert int to string
+      count: json['count'].toString(),
       region: json['region'],
     );
   }

@@ -7,7 +7,7 @@ final Map<String, List<String>> Region_Zones = {
     'West Gondar',
     'Wag Hemra',
     'West Gojjam',
-    'Bahir Dar (special zone)',
+    'Bahir Dar',
     'South Gondar',
     'North Wollo',
     'South Wollo'
@@ -44,8 +44,6 @@ final Map<String, List<String>> Region_Zones = {
     'West Haraghe',
     'West Shewa',
     'West Welega',
-    'Oromia Special Zone Surrounding Finfinne',
-    'Burayu Special Zone',
     'Borana',
   ],
   'Sidama': [

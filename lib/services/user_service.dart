@@ -208,7 +208,7 @@ Future<bool> resetPassword(String code, String newPassword) async {
   final response = await http.post(url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'code': code, 'password': newPassword}));
-
+  log('${response.statusCode}');
   if (response.statusCode == 201) {
     return true;
   } else {

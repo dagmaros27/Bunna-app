@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:bunnaapp/services/user_service.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
@@ -44,15 +45,19 @@ class _Page2State extends State<Page2> {
   final Map<String, List<String>> regionZones = Region_Zones;
   List<String> _zones = [];
   final TextEditingController phoneController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     _goToHome() {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const Home()));
+          .push(MaterialPageRoute(builder: (context) => const SignIn()));
     }
 
     signup(user) async {
+      setState(() {
+        _isLoading = true;
+      });
       if (user.isValid()) {
         final registered = await register(user);
         if (registered == true) {
@@ -66,6 +71,9 @@ class _Page2State extends State<Page2> {
         const snackBar = SnackBar(content: Text('Missing or Invalid input'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
 
     return Scaffold(
@@ -125,68 +133,59 @@ class _Page2State extends State<Page2> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
-                          child: DropdownButtonFormField<String>(
-                            value: regionValue,
-                            decoration: InputDecoration(labelText: 'Region'),
-                            items: regionZones.keys.map((String region) {
-                              return DropdownMenuItem<String>(
-                                value: region,
-                                child: Text(region),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                regionValue = value;
-                                _zones = regionZones[value] ?? [];
-                                zoneValue = null; // Reset zone value
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please select your region';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) => regionValue = value,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 16),
-                          child: DropdownButtonFormField<String>(
-                            value: zoneValue,
-                            decoration: InputDecoration(labelText: 'Zone'),
-                            items: _zones.map((String zone) {
-                              return DropdownMenuItem<String>(
-                                value: zone,
-                                child: Text(zone),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                zoneValue = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please select your zone';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) => zoneValue = value,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: DropdownButtonFormField<String>(
+                      value: regionValue,
+                      decoration: InputDecoration(labelText: 'Region'),
+                      items: regionZones.keys.map((String region) {
+                        return DropdownMenuItem<String>(
+                          value: region,
+                          child: Text(region),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          regionValue = value;
+                          _zones = regionZones[value] ?? [];
+                          zoneValue = null; // Reset zone value
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select your region';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) => regionValue = value,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: DropdownButtonFormField<String>(
+                      value: zoneValue,
+                      decoration: InputDecoration(labelText: 'Zone'),
+                      items: _zones.map((String zone) {
+                        return DropdownMenuItem<String>(
+                          value: zone,
+                          child: Text(zone),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          zoneValue = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select your zone';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) => zoneValue = value,
+                    ),
                   ),
                   Padding(
                     padding:
@@ -202,7 +201,7 @@ class _Page2State extends State<Page2> {
                           .map<DropdownMenuEntry<String>>((String value) {
                         return DropdownMenuEntry<String>(
                           value: value,
-                          label: (value),
+                          label: value,
                         );
                       }).toList(),
                     ),
@@ -219,19 +218,23 @@ class _Page2State extends State<Page2> {
                           ),
                         ),
                       ),
-                      onPressed: () {
-                        widget.user.phoneNumber =
-                            "+251${phoneController.text.substring(1)}";
-                        widget.user.region = regionValue;
-                        widget.user.zone = zoneValue;
-                        widget.user.occupationType = occupationValue;
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              widget.user.phoneNumber =
+                                  "+251${phoneController.text.substring(1)}";
+                              widget.user.region = regionValue;
+                              widget.user.zone = zoneValue;
+                              widget.user.occupationType = occupationValue;
 
-                        signup(widget.user);
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(child: Text("Register")),
-                      ),
+                              signup(widget.user);
+                            },
+                      child: _isLoading
+                          ? const CircularProgressIndicator()
+                          : const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Center(child: Text("Register")),
+                            ),
                     ),
                   ),
                 ],

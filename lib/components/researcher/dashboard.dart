@@ -103,7 +103,7 @@ class _DashboardState extends State<Dashboard> {
                         const Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            "Accuracy rate",
+                            "Confidence rate",
                             style: TextStyle(
                               fontSize: 24,
                             ),
@@ -114,7 +114,9 @@ class _DashboardState extends State<Dashboard> {
                               padding: const EdgeInsets.all(8.0),
                               child: Countup(
                                 begin: 0,
-                                end: 83.47,
+                                end: analytics?.averageConfidence
+                                        .roundToDouble() ??
+                                    0.0,
                                 duration: const Duration(seconds: 3),
                                 separator: ',',
                                 suffix: "%",
@@ -127,7 +129,7 @@ class _DashboardState extends State<Dashboard> {
                         const Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            "The accuracy rate indicates how correctly the system identifies diseases in the analyzed samples",
+                            "The confidence rate indicates how confidently the system identifies diseases in the analyzed samples",
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                         ),

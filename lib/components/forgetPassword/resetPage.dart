@@ -2,6 +2,7 @@ import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:bunnaapp/models/models.dart';
 import 'package:bunnaapp/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 class ResetPasswordPage extends StatefulWidget {
   ResetPasswordPage({super.key});
@@ -20,24 +21,6 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    _resetPassword() async {
-      final reseted = await resetPassword(_code, _newPassword);
-
-      if (reseted == true) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const SignIn()),
-          (route) => false,
-        );
-      } else {
-        const snackBar = SnackBar(
-          content: Text('Invalid code'),
-          backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -53,7 +36,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'code',
                 ),
                 keyboardType: TextInputType.number,
@@ -127,13 +110,13 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
               const SizedBox(height: 32.0),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      final changed = _resetPassword();
+                      final changed = await resetPassword(_code, _newPassword);
                       if (changed == false) {
                         const snackBar = SnackBar(
-                          content: Text('Some error occurred'),
+                          content: Text('Invalid Code'),
                           backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -147,11 +130,11 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                       }
                     }
                   },
-                  child: Text('Change Password'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 32.0),
                   ),
+                  child: const Text('Change Password'),
                 ),
               ),
             ],

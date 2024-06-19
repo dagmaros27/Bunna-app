@@ -24,13 +24,13 @@ class _InformationPageState extends State<Informations> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Epidemic Alert'),
+          title: const Text('Epidemic Alert'),
           content:
               Text('There are $diseaseCount epidemic diseases in your region.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
@@ -43,32 +43,49 @@ class _InformationPageState extends State<Informations> {
     final diseases = Provider.of<EpidemicProvider>(context).diseases;
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Epidemic Information'),
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            "CODICAP",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
         ),
-        body: Column(
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Epidemic diseases",
+            const Text(
+              "Epidemic Diseases",
               style: TextStyle(fontSize: 24, color: Colors.grey),
             ),
-            diseases == null || diseases.isEmpty
-                ? Center(child: Text('No epidemic diseases reported.'))
-                : ListView.builder(
-                    itemCount: diseases.length,
-                    itemBuilder: (context, index) {
-                      final disease = diseases[index];
-                      return Card(
-                        margin: EdgeInsets.all(10.0),
-                        child: ListTile(
-                          title: Text(disease.diseaseName,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          subtitle: Text('Reported cases: ${disease.reported}'),
-                        ),
-                      );
-                    },
-                  ),
+            const Divider(
+              endIndent: 64,
+            ),
+            Expanded(
+              child: diseases == null || diseases.isEmpty
+                  ? const Center(child: Text('No epidemic diseases reported.'))
+                  : ListView.builder(
+                      itemCount: diseases.length,
+                      itemBuilder: (context, index) {
+                        final disease = diseases[index];
+                        return Card(
+                          margin: const EdgeInsets.all(10.0),
+                          child: ListTile(
+                            title: Text(disease.diseaseName,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            subtitle:
+                                Text('Reported cases: ${disease.reported}'),
+                          ),
+                        );
+                      },
+                    ),
+            ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

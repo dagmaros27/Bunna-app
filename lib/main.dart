@@ -48,7 +48,7 @@ class Bunna extends StatelessWidget {
       // Coffee disease classifier application
       debugShowCheckedModeBanner: false,
       title: "CODICAP",
-      home: SignIn(),
+      home: const SignIn(),
 
       theme: theme,
     );

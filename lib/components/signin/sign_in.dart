@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:bunnaapp/components/forgetPassword/forgetPassword.dart';
@@ -22,6 +23,7 @@ class _SignInState extends State<SignIn> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _isObscure = true;
+  bool _isLoading = false; // Add loading state
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class _SignInState extends State<SignIn> {
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: "Email",
-                        hintText: "john@example.com"),
+                        hintText: "abebe@example.com"),
                   ),
                 ),
                 Padding(
@@ -105,19 +107,34 @@ class _SignInState extends State<SignIn> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextButton(
-                    onPressed: () {
-                      _login(context);
-                    },
+                    onPressed: _isLoading
+                        ? null
+                        : () {
+                            FocusScope.of(context).unfocus();
+                            _login(context);
+                          },
                     style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          return _isLoading
+                              ? Colors.grey
+                              : const Color(0XFFcfe2ce);
+                        },
+                      ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 16, bottom: 16),
-                      child: Center(child: Text("Log In")),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 16),
+                      child: Center(
+                          child: _isLoading
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text("Log In")),
                     ),
                   ),
                 ),
@@ -157,6 +174,10 @@ class _SignInState extends State<SignIn> {
   }
 
   void _login(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
+
     String email = emailController.text.trim();
     String password = passwordController.text;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -172,17 +193,38 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Color.fromRGBO(255, 14, 22, 0.671),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
-      final loggedIn =
-          await login(email: email, password: password, context: context);
-      //final loggedIn = true;
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
 
-      if (loggedIn == true) {
-        goToHome(context, context.read<UserProvider>().role ?? "user");
-      } else {
-        const snackBar = SnackBar(content: Text('Logging failed'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+    // Start a timer for timeout
+    const timeoutDuration = Duration(seconds: 10);
+    bool timedOut = false;
+    Timer? timeoutTimer;
+
+    timeoutTimer = Timer(timeoutDuration, () {
+      timedOut = true;
+      setState(() {
+        _isLoading = false;
+      });
+    });
+
+    final loggedIn =
+        await login(email: email, password: password, context: context);
+
+    // Clear the timeout timer regardless of the login result
+    timeoutTimer.cancel();
+
+    if (loggedIn == true) {
+      goToHome(context, context.read<UserProvider>().role ?? "user");
+    } else {
+      const snackBar = SnackBar(content: Text('Logging failed, Try again!'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

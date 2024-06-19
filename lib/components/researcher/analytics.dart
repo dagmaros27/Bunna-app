@@ -5,6 +5,7 @@ import 'package:bunnaapp/components/researcher/bar_graph.dart';
 import 'package:bunnaapp/providers/analytics_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class Analytics extends StatefulWidget {
   const Analytics({super.key});
@@ -28,6 +29,23 @@ class _AnalyticsState extends State<Analytics> {
       }
     }).toList();
   }
+
+  Color getRandomColor() {
+    Random random = Random();
+    return Color.fromRGBO(
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+      1,
+    );
+  }
+
+  final Map<String, Color> diseaseColorMap = {
+    'Miner': Colors.red,
+    'Cerscospora': Colors.yellow,
+    'Leaf rust': Colors.green,
+    'Phoma': Colors.blue,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -67,18 +85,22 @@ class _AnalyticsState extends State<Analytics> {
                   endIndent: 16,
                 ),
                 if (barData != null)
-                  ...barData.entries.map((entry) {
-                    String disease = entry.key;
-                    List<int> frequencies = entry.value[0].cast<int>();
-                    List<String> regions = entry.value[1].cast<String>();
-                    log("$disease ${frequencies.length}");
-                    return _buildBarChartSample(
-                      frequencies: frequencies,
-                      regions: shortenRegionNames(regions),
-                      barColor: Colors.blue,
-                      title: disease,
-                    );
-                  }).toList(),
+                  Column(
+                    children: barData.entries.map((entry) {
+                      String disease = entry.key;
+                      List<int> frequencies = entry.value[0].cast<int>();
+                      List<String> regions = entry.value[1].cast<String>();
+                      Color? barColor = diseaseColorMap.containsKey(disease)
+                          ? diseaseColorMap[disease]
+                          : getRandomColor();
+                      return _buildBarChartSample(
+                        frequencies: frequencies,
+                        regions: shortenRegionNames(regions),
+                        barColor: barColor!,
+                        title: disease,
+                      );
+                    }).toList(),
+                  ),
               ],
             ),
           ),
@@ -93,6 +115,10 @@ class _AnalyticsState extends State<Analytics> {
     required Color barColor,
     required String title,
   }) {
+    // Determine the width of each bar and the total width required
+    const double barWidth = 50.0;
+    double totalWidth = regions.length * barWidth;
+
     return Container(
       margin: const EdgeInsets.all(16.0),
       padding: const EdgeInsets.all(8.0),
@@ -101,7 +127,10 @@ class _AnalyticsState extends State<Analytics> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width - 32, // Adjust width as needed
+        width: max(
+            totalWidth,
+            MediaQuery.of(context).size.width -
+                32), // Ensure the chart has enough width
         child: DiseaseChart(
           frequencies: frequencies,
           regions: regions,

@@ -44,27 +44,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 16.0, right: 16, top: 36),
+        padding: const EdgeInsets.only(left: 16.0, right: 16, top: 36),
         child: Column(
           children: [
-            Text(
+            const Text(
                 'Add your email and click the reset password, you will recieve a code to reset your password in your email',
                 style: TextStyle(color: Colors.grey)),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter your email',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _resetPassword,
-              child: Text('Reset Password'),
+              child: const Text('Reset Password'),
             ),
           ],
         ),

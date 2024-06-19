@@ -17,9 +17,12 @@ class UserProfilePage extends StatelessWidget {
     log(user.firstName);
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('My Profile', style: Theme.of(context).textTheme.titleLarge),
-        centerTitle: true,
+        title: Center(
+          child: Text(
+            "CODICAP",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -364,7 +367,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 class ChangePasswordPage extends StatefulWidget {
   final User user;
 
-  ChangePasswordPage({required this.user});
+  const ChangePasswordPage({required this.user});
 
   @override
   _ChangePasswordPageState createState() => _ChangePasswordPageState();
@@ -501,11 +504,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       }
                     }
                   },
-                  child: Text('Change Password'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0, horizontal: 32.0),
                   ),
+                  child: const Text('Change Password'),
                 ),
               ),
             ],

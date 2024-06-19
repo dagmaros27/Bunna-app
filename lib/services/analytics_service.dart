@@ -63,6 +63,7 @@ Future<bool> fetchAnalyticsData(BuildContext context) async {
       });
 
       final analytics = Analytics(
+        averageConfidence: jsonResponse['Average Confidence'],
         totalDiseaseReport: reports['total_reports'],
         countByDisease: countByDisease,
         countByRegion: countByRegion,

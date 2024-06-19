@@ -5,6 +5,7 @@ import 'package:bunnaapp/components/account/account.dart';
 import 'package:bunnaapp/components/auth/auth.dart';
 import 'package:bunnaapp/components/drawer/user_drawer.dart';
 import 'package:bunnaapp/components/home/lang.dart';
+import 'package:bunnaapp/components/home/notification.dart';
 import 'package:bunnaapp/components/information/informations.dart';
 import 'package:bunnaapp/components/history/history.dart';
 import 'package:bunnaapp/components/researcher/dashboard.dart';
@@ -85,37 +86,64 @@ class _HomeState extends State<Home> {
         ),
       ),
       drawer: UserDrawer(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 150),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (userRole?.toLowerCase() ==
-                  'researcher') // Conditionally render the Dashboard button
+      body: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: NotificationChip(),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 150),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                if (userRole?.toLowerCase() ==
+                    'researcher') // Conditionally render the Dashboard button
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                      width: 200,
+                      height: 48,
+                      child: TextButton(
+                        onPressed: () async {
+                          final analytics =
+                              context.read<AnalyticsProvider>().analytics;
+                          if (analytics == null) {
+                            await fetchAnalyticsData(context);
+                          }
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const Dashboard()),
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.dashboard, size: 24),
+                            Text(
+                              "Dashboard",
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: SizedBox(
                     width: 200,
                     height: 48,
                     child: TextButton(
-                      onPressed: () async {
-                        final analytics =
-                            context.read<AnalyticsProvider>().analytics;
-                        if (analytics == null) {
-                          await fetchAnalyticsData(context);
-                        }
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const Dashboard()),
-                        );
+                      onPressed: () {
+                        _pickImageFromCamera();
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.dashboard, size: 24),
+                          const Icon(Icons.camera_alt, size: 24),
                           Text(
-                            "Dashboard",
+                            "Direct Scan",
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
@@ -123,78 +151,58 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 200,
-                  height: 48,
-                  child: TextButton(
-                    onPressed: () {
-                      _pickImageFromCamera();
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.camera_alt, size: 24),
-                        Text(
-                          "Direct Scan",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: 200,
+                    height: 48,
+                    child: TextButton(
+                      onPressed: () {
+                        _pickImageFromGallery();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.image, size: 24),
+                          Text(
+                            "Upload Image",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 200,
-                  height: 48,
-                  child: TextButton(
-                    onPressed: () {
-                      _pickImageFromGallery();
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.image, size: 24),
-                        Text(
-                          "Upload Image",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: 200,
+                    height: 48,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => Informations()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.info, size: 24),
+                          Text(
+                            "Informations",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: 200,
-                  height: 48,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Informations()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.info, size: 24),
-                        Text(
-                          "Informations",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+      ]),
     );
   }
 }

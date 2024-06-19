@@ -18,7 +18,7 @@ class HistoryCard extends StatelessWidget {
             .push(MaterialPageRoute(builder: (context) => const Results()));
       },
       child: Card(
-        color: Color.fromARGB(245, 133, 252, 100).withOpacity(0.5),
+        color: const Color.fromARGB(245, 133, 252, 100).withOpacity(0.5),
         child: Column(
           children: [
             ListTile(
