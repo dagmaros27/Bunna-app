@@ -1,15 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:bunnaapp/components/about/about.dart';
-import 'package:bunnaapp/components/account/account.dart';
-import 'package:bunnaapp/components/auth/auth.dart';
 import 'package:bunnaapp/components/drawer/user_drawer.dart';
-import 'package:bunnaapp/components/home/lang.dart';
 import 'package:bunnaapp/components/home/notification.dart';
 import 'package:bunnaapp/components/information/informations.dart';
-import 'package:bunnaapp/components/history/history.dart';
 import 'package:bunnaapp/components/researcher/dashboard.dart';
-import 'package:bunnaapp/components/signin/sign_in.dart';
 import 'package:bunnaapp/providers/analytics_provider.dart';
 import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:bunnaapp/services/analytics_service.dart';
@@ -17,8 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import "package:flutter/material.dart";
 import '../imageProcessing/image_processing.dart';
-import '../../themes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
