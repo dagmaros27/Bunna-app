@@ -12,6 +12,8 @@ import '../utils/urls.dart';
 
 String backendUrl = GlobalUrl.rootUrl;
 
+//the function send the image to be processed by the AI model on the backend and accepts the result
+
 Future<String?> processImage(File imageFile, BuildContext context) async {
   final url = Uri.parse('$backendUrl/coffee-disease-detection');
 
@@ -33,6 +35,8 @@ Future<String?> processImage(File imageFile, BuildContext context) async {
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();
       var jsonResponse = jsonDecode(responseBody);
+
+      // class is returned when the image is not coffee leaf
       if (jsonResponse['class'] != null) {
         return "Image contains anomaly try to take another picture";
       } else {

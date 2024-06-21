@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
+//responsible for connecting to firebase, but we used our own backend so we dont use it
+
 class AuthService {
   final _auth = FirebaseAuth.instance;
 

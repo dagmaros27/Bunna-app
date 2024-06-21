@@ -1,10 +1,7 @@
 import 'dart:developer';
 
-import 'package:bunnaapp/components/signin/sign_in.dart';
-import 'package:bunnaapp/providers/user_providers.dart';
 import 'package:bunnaapp/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../../data/regions.dart';
 
@@ -54,14 +51,12 @@ class UserProfilePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        // Profile photo aligned to the center
         const Center(
           child: CircleAvatar(
             radius: 40.0,
             backgroundImage: AssetImage('assets/images/user.png'),
           ),
         ),
-
         ListTile(
           leading: Icon(Icons.person, color: Theme.of(context).primaryColor),
           title: Text("${user.firstName!} ${user.lastName!}",

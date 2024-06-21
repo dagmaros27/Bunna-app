@@ -12,6 +12,8 @@ import '../utils/urls.dart';
 
 String backendUrl = GlobalUrl.rootUrl;
 
+// This function is responsible for fetching the analytics data from the backend server.
+// It takes the BuildContext as a parameter, which is used to access the UserProvider and AnalyticsProvider.
 Future<bool> fetchAnalyticsData(BuildContext context) async {
   final String? authToken = context.read<UserProvider>().authToken;
 

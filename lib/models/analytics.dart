@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 class Analytics {
   int totalDiseaseReport;
@@ -7,14 +6,6 @@ class Analytics {
   List<Disease> countByDisease;
   List<Region> countByRegion;
   Map<String, List<DiseasePrevalency>> prevalency;
-
-  // addCountByDisease(Disease disease) {
-  //   countByDisease.add(disease);
-  // }
-
-  // addCountByRegion(Region region) {
-  //   countByRegion.add(region);
-  // }
 
   Analytics(
       {required this.countByDisease,

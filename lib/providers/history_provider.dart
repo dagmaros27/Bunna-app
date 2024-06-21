@@ -26,6 +26,7 @@ class HistoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //dummy data for test
   void _initializeDummyData() {
     final dummyReports = [
       Report(

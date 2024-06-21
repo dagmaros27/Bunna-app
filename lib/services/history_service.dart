@@ -10,6 +10,8 @@ import '../models/models.dart';
 
 String backendUrl = GlobalUrl.rootUrl;
 
+//This function fetches the user history specified by the user id
+
 Future<void> fetchHistoryData(BuildContext context) async {
   final String? authToken = context.read<UserProvider>().authToken;
   final int? userId = context.read<UserProvider>().userId;
